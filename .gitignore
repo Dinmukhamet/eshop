@@ -1,0 +1,14 @@
+*.pyc
+*~
+__pycache__
+venv
+migrations
+.env
+db.sqlite3
+Pipfile
+Pipfile.lock
+.DS_Store
+.vscode
+.coverage
+htmlcov
+
