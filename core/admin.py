@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 
-# Register your models here.
+# Register your models here.    
 admin.site.register(Category)
 admin.site.register(Brand)
 
@@ -14,8 +14,8 @@ class ProductAdmin(admin.ModelAdmin):
                            'price', 'image', 'brand')})
     ]
 
-class SubcategoryToProductAdmin(admin.ModelAdmin):
-    list_filter = ('subcategory',)
+# class SubcategoryToProductAdmin(admin.ModelAdmin):
+    # list_filter = ('subcategory',)
 
 admin.site.register(Product, ProductAdmin)
-admin.site.register(SubcategoryToProduct, SubcategoryToProductAdmin)
+# admin.site.register(SubcategoryToProduct, SubcategoryToProductAdmin)

@@ -6,13 +6,16 @@ from core import views
 
 router = DefaultRouter()
 router.register(r'category', views.CategoryView)
-router.register(r'subcategory', views.SubcategoryView)
-router.register(r'subcategory_to_product', views.SubcategoryToProductView)
+# router.register(r'subcategory', views.SubcategoryView)
+# router.register(r'subcategory_to_product', views.SubcategoryToProductView)
 router.register(r'brand', views.BrandView)
 router.register(r'product', views.ProductView)
 router.register(r'contact', views.ContactView)
 router.register(r'purchased_product', views.PurchasedProductView)
 router.register(r'purchase', views.PurchaseView)
+router.register(r'rating', views.RatingView)
+router.register(r'comment', views.CommentView)
+router.register(r'comment_rating', views.CommentRatingView)
 
 urlpatterns = [
     path('', include(router.urls)),
