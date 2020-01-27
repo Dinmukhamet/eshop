@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'rest_framework',
     'django_filters',
-    'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    'whitenoise.runserver_nostatic',
     # my app
     'core',
 ]
