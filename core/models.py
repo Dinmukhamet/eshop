@@ -26,8 +26,8 @@ class Brand(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
-
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
+# setnull chtoby ne udal
     class Meta:
         ordering = ['name']
 
