@@ -23,7 +23,7 @@ class CategoryView(generics.ListAPIView):
 #     serializer_class = SubcategorySerializer
 
 
-class ProductView(generics.ListAPIView):
+class ProductView(generics.ListAPIView, generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
