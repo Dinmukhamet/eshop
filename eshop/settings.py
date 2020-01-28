@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'whitenoise.runserver_nostatic',
+    'drf_yasg',
     # my app
     'core',
 ]

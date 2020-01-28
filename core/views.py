@@ -1,11 +1,11 @@
 from django.shortcuts import render
+from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import *
 from .serializers import *
-from rest_framework import viewsets
-from django_filters.rest_framework import DjangoFilterBackend
-# Create your views here.
 
+# Create your views here.
 
 class BrandView(viewsets.ModelViewSet):
     queryset = Brand.objects.all()
