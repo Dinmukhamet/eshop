@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 from django.core.validators import MaxValueValidator, MinValueValidator 
 # Create your models here.
 
@@ -62,6 +63,8 @@ class Product(models.Model):
     def __str__(self):
         return '{}: {}'.format(self.name, self.price)
 
+    def total_purchase(self):
+        return PurchasedProduct.objects.annotate(Count('product'))
 
 # class SubcategoryToProduct(models.Model):
 #     subcategory = models.ForeignKey(
@@ -86,7 +89,6 @@ class Purchase(models.Model):
     def total_sum(self):
         return sum(item.total() for item in PurchasedProduct.objects.filter(purchase=self.id))
 
-
 class PurchasedProduct(models.Model):
     purchase = models.ForeignKey(
         Purchase, related_name='products', on_delete=models.CASCADE, null=False)
@@ -109,8 +111,7 @@ class PurchasedProduct(models.Model):
 
     def total(self):
         return self.count * self.price()
-
-
+    
 class Favourite(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
@@ -181,3 +182,16 @@ class CommentRating(models.Model):
     def __str__(self):
         product = self.comment.product.name
         return 'Comment to product "{}" #{} - {}'.format(product, self.comment, self.rate)
+
+# class Bestseller(models.Model):
+#     product = models.ForeignKey(PurchasedProduct, on_delete=models.CASCADE, null=False)
+
+#     class Meta:
+#         ordering = ['product']
+    
+#     def __str__(self):
+#         product_name = self.product.name
+#         return product_name
+    
+#     def by_total_purchases(self):
+        
