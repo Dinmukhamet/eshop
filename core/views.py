@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django_filters.rest_framework import DjangoFilterBackend
+from django.views import generic
 
 from .models import *
 from .serializers import *
@@ -23,11 +24,14 @@ class CategoryView(generics.ListAPIView):
 #     serializer_class = SubcategorySerializer
 
 
-class ProductView(generics.ListAPIView, generics.RetrieveAPIView):
+class ProductView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['category']
+
+class ProductDetailView(generic.DetailView):
+    model = Product
 
 # class SubcategoryToProductView(viewsets.ModelViewSet):
 #     queryset = SubcategoryToProduct.objects.all()

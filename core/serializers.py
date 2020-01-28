@@ -65,10 +65,10 @@ class PurchaseSerializer(serializers.ModelSerializer):
         products_data = validated_data.pop('products')
         purchase = Purchase.objects.create(**validated_data)
         for products in products_data:
-            product = PurchasedProduct.objects.get_or_create(
+            product = PurchasedProduct.objects.create(
                 purchase=purchase, **products)
         for contacts in contacts_data:
-            contact = Contact.objects.get_or_create(
+            contact = Contact.objects.create(
                 purchase=purchase, **contacts)
         purchase.save()
         return purchase
