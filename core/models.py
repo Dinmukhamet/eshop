@@ -52,8 +52,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.IntegerField()
-    image = models.ImageField(
-        upload_to=None, default='product_pics/None/no-img.jpg')
+    image = models.ImageField(default='product_pics/None/no-img.jpg')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
 
