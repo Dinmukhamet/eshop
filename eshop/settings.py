@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
 # Application definition
 
 INSTALLED_APPS = [
+    'django-extensions',
     'jet.dashboard',
     'jet',
     'django.contrib.admin',
