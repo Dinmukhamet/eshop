@@ -40,6 +40,7 @@ urlpatterns = [
     path('brand/', views.BrandView.as_view(), name='brand'),
     path('category/', views.CategoryView.as_view(), name='category'),
     path('product/', views.ProductView.as_view(), name='product'),
+    path('product/<int:pk>/', views.ProductView.as_view())
     path('contact/', views.ContactView.as_view(), name='contact'),
     path('purchased_product/', views.PurchasedProductView.as_view(), name='purchased_product'),
     path('purchase/', views.PurchaseView.as_view(), name='purchase'),
