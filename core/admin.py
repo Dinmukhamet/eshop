@@ -1,21 +1,29 @@
 from django.contrib import admin
 from .models import *
 
-# Register your models here.    
-admin.site.register(Category)
-admin.site.register(Brand)
+# Register your models here.
 
 
 class ProductAdmin(admin.ModelAdmin):
+    list_filter = ('category',)
     list_display = ('name', 'description', 'price',
                     'image', 'brand')
     fieldsets = [
         (None, {'fields': (('name', 'description'),
-                           'price', 'image', 'brand')})
+                           'price', 'image', 'category', 'brand')})
     ]
 
-# class SubcategoryToProductAdmin(admin.ModelAdmin):
-    # list_filter = ('subcategory',)
 
+class PurchasedProductAdmin(admin.ModelAdmin):
+    list_filter = ('purchase',)
+    list_display = ('name', 'price', 'count', 'total')
+
+    fieldsets = [
+        (None, {'fields': ('name', 'price', 'count', 'total')})
+    ]
+
+
+admin.site.register(Category)
+admin.site.register(Brand)
 admin.site.register(Product, ProductAdmin)
-# admin.site.register(SubcategoryToProduct, SubcategoryToProductAdmin)
+admin.site.register(PurchasedProduct, PurchasedProductAdmin)

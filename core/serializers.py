@@ -49,7 +49,7 @@ class PurchasedProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PurchasedProduct
-        fields = ['product', 'name', 'price', 'count', 'total']
+        fields = ['name', 'price', 'count', 'total']
 
 
 class PurchaseSerializer(serializers.ModelSerializer):

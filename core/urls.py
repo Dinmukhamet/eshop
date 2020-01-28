@@ -1,5 +1,7 @@
 from django.urls import include, path
 from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls.static import static
 from rest_framework import routers, permissions
 from rest_framework.routers import DefaultRouter
 from drf_yasg.views import get_schema_view
@@ -50,4 +52,4 @@ urlpatterns = [
                                            cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc',
                                          cache_timeout=0), name='schema-redoc'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

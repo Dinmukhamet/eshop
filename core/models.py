@@ -53,7 +53,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.IntegerField()
     image = models.ImageField(
-        upload_to='product_pics/', default='product_pics/None/no-img.jpg')
+        upload_to=None, default='product_pics/None/no-img.jpg')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
 
@@ -95,7 +95,12 @@ class PurchasedProduct(models.Model):
     count = models.IntegerField()
 
     class Meta:
-        ordering = ['purchase']
+        ordering = ['product']
+    
+    def __str__(self):
+        purchase_id = self.id
+        product_name = self.product.name
+        return 'Purchase #{}: {} - {}'.format(purchase_id, product_name, self.count)
 
     def name(self):
         return self.product.name
