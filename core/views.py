@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import *
@@ -7,12 +7,12 @@ from .serializers import *
 
 # Create your views here.
 
-class BrandView(viewsets.ModelViewSet):
+class BrandView(generics.ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
 
 
-class CategoryView(viewsets.ModelViewSet):
+class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -22,7 +22,7 @@ class CategoryView(viewsets.ModelViewSet):
 #     serializer_class = SubcategorySerializer
 
 
-class ProductView(viewsets.ModelViewSet):
+class ProductView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
@@ -35,29 +35,29 @@ class ProductView(viewsets.ModelViewSet):
 #     filterset_fields = ['subcategory']
 
 
-class ContactView(viewsets.ModelViewSet):
+class ContactView(generics.ListCreateAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
 
 
-class PurchasedProductView(viewsets.ModelViewSet):
+class PurchasedProductView(generics.ListCreateAPIView):
     queryset = PurchasedProduct.objects.all()
     serializer_class = PurchasedProductSerializer
 
 
-class PurchaseView(viewsets.ModelViewSet):
+class PurchaseView(generics.ListCreateAPIView):
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
 
 
-class RatingView(viewsets.ModelViewSet):
+class RatingView(generics.ListCreateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
 
-class CommentView(viewsets.ModelViewSet):
+class CommentView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
-class CommentRatingView(viewsets.ModelViewSet):
+class CommentRatingView(generics.ListCreateAPIView):
     queryset = CommentRating.objects.all()
     serializer_class = CommentRatingSerializer
