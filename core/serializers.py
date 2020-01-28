@@ -49,7 +49,7 @@ class PurchasedProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PurchasedProduct
-        fields = ['name', 'price', 'count', 'total']
+        fields = ['product', 'name', 'price', 'count', 'total']
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
@@ -65,11 +65,9 @@ class PurchaseSerializer(serializers.ModelSerializer):
         products_data = validated_data.pop('products')
         purchase = Purchase.objects.create(**validated_data)
         for products in products_data:
-            product = PurchasedProduct.objects.create(
-                purchase=purchase, **products)
+            product = PurchasedProduct.objects.get_or_create(purchase=purchase, **products)
         for contacts in contacts_data:
-            contact = Contact.objects.create(
-                purchase=purchase, **contacts)
+            contact = Contact.objects.get_or_create(purchase=purchase, **contacts)
         purchase.save()
         return purchase
 
