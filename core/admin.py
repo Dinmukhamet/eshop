@@ -5,7 +5,7 @@ from .models import *
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_filter = ('category',)
+    list_filter = ('category', 'brand')
     list_display = ('name', 'description', 'price',
                     'image', 'brand')
     fieldsets = [
