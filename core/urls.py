@@ -44,7 +44,7 @@ urlpatterns = [
     path('contact/', views.ContactView.as_view(), name='contact'),
     path('purchased_product/', views.PurchasedProductView.as_view(), name='purchased_product'),
     path('purchase/', views.PurchaseView.as_view(), name='purchase'),
-    path('purchase/<int:pk>/', views.PurchaseDetailView.as_view())
+    path('purchase/<int:pk>/', views.PurchaseDetailView.as_view()),
     path('product_rating/', views.RatingView.as_view(), name='product_rating'),
     path('comment/', views.CommentView.as_view(), name='comment'),
     path('comment_rating/', views.CommentRatingView.as_view(), name='comment_rating'),
