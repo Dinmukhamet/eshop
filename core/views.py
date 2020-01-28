@@ -7,6 +7,7 @@ from .serializers import *
 
 # Create your views here.
 
+
 class BrandView(generics.ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
@@ -54,10 +55,22 @@ class RatingView(generics.ListCreateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
 
+
 class CommentView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+
 class CommentRatingView(generics.ListCreateAPIView):
     queryset = CommentRating.objects.all()
     serializer_class = CommentRatingSerializer
+
+
+class FavouriteView(generics.ListCreateAPIView):
+    queryset = Favourite.objects.all()
+    serializer_class = FavouriteSerializer
+
+
+class FavouriteProductView(generics.ListCreateAPIView):
+    queryset = FavouriteProduct.objects.all()
+    serializer_class = FavouriteProductSerializer
