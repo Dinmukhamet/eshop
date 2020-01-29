@@ -179,9 +179,9 @@ class CommentRating(models.Model):
     class Meta:
         ordering = ['comment']
     
-    def __str__(self):
-        product = self.comment.product.name
-        return 'Comment to product "{}" #{} - {}'.format(product, self.comment, self.rate)
+    # def __str__(self):
+    #     product = self.comment.product.name
+    #     return 'Comment to product "{}" #{} - {}'.format(product, self.comment, self.rate)
 
 # class Bestseller(models.Model):
 #     product = models.ForeignKey(PurchasedProduct, on_delete=models.CASCADE, null=False)
