@@ -85,9 +85,10 @@ class FavouriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Favourite
-        fields = ['products', 'date']
+        fields = ['contacts','products', 'date']
 
     def create(self, validated_data):
+        contacts_data = validated_data.pop('contacts')
         products_data = validated_data.pop('products')
         favourite = Favourite.objects.create(**validated_data)
         for products in products_data:
