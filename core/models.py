@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Count
+from django.db.models import Sum
 from django.core.validators import MaxValueValidator, MinValueValidator 
 # Create your models here.
 
@@ -64,7 +64,7 @@ class Product(models.Model):
         return '{}: {}'.format(self.name, self.price)
 
     def total_purchase(self):
-        return PurchasedProduct.objects.annotate(Count('product'))
+        return PurchasedProduct.objects.filter(product=self.id).aggregate(count=Sum('count'))['count']
 
 # class SubcategoryToProduct(models.Model):
 #     subcategory = models.ForeignKey(
