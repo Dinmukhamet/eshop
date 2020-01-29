@@ -194,4 +194,14 @@ class CommentRating(models.Model):
 #         return product_name
     
 #     def by_total_purchases(self):
-        
+
+class Slider(models.Model):
+    image = models.ImageField(default='slider_pics/None/no-img.jpg')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ['image']
+    
+    def __str__(self):
+        product_name = self.product.name
+        return 'Images for product {}'.format(product_name)

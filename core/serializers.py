@@ -119,3 +119,9 @@ class CommentRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentRating
         fields = ['comment', 'rate']
+
+class SliderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Slider
+        fields = ['image', 'product']

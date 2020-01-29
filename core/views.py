@@ -75,3 +75,7 @@ class FavouriteView(generics.ListCreateAPIView):
 class FavouriteProductView(generics.ListCreateAPIView):
     queryset = FavouriteProduct.objects.all()
     serializer_class = FavouriteProductSerializer
+
+class SliderView(generics.ListAPIView):
+    queryset = Slider.objects.all()
+    serializer_class = SliderSerializer
