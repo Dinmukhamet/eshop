@@ -203,7 +203,7 @@ class Slider(models.Model):
         ordering = ['image']
     
     def __str__(self):
-        if self.product:
+        if product:
             product_name = self.product.name
             return 'Images for product {}'.format(product_name)
-        return 'There is no product'
+        return 'There is no product. Slider 0#{}'.format(self.id)
