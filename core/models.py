@@ -204,4 +204,6 @@ class Slider(models.Model):
     
     def __str__(self):
         product_name = self.product.name
-        return 'Images for product {}'.format(product_name)
+        if product_name is not None:
+            return 'Images for product {}'.format(product_name)
+        return 'There is no product'
