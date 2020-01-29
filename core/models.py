@@ -179,9 +179,9 @@ class CommentRating(models.Model):
     class Meta:
         ordering = ['comment']
     
-    # def __str__(self):
-    #     product = self.comment.product.name
-    #     return 'Comment to product "{}" #{} - {}'.format(product, self.comment, self.rate)
+    def __str__(self):
+        product = self.comment.product.name
+        return 'Comment to product "{}" #{} - {}'.format(product, self.comment, self.rate)
 
 # class Bestseller(models.Model):
 #     product = models.ForeignKey(PurchasedProduct, on_delete=models.CASCADE, null=False)
@@ -203,7 +203,7 @@ class Slider(models.Model):
         ordering = ['image']
     
     def __str__(self):
-        product_name = self.product.name
-        if product_name is not None:
+        if self.product:
+            product_name = self.product.name
             return 'Images for product {}'.format(product_name)
         return 'There is no product'
