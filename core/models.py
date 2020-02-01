@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Sum
-from django.core.validators import MaxValueValidator, MinValueValidator 
+from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 
@@ -27,26 +27,14 @@ class Brand(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
-# setnull chtoby ne udal
+    parent = models.ForeignKey(
+        'self', on_delete=models.SET_NULL, blank=True, null=True)
+
     class Meta:
         ordering = ['name']
 
     def __str__(self):
         return self.name
-
-
-# class Subcategory(models.Model):
-#     category = models.ForeignKey(
-#         Category, on_delete=models.CASCADE, null=False)
-#     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
-#     name = models.CharField(max_length=255)
-
-#     class Meta:
-#         ordering = ['name']
-
-#     def __str__(self):
-#         return self.name
 
 
 class Product(models.Model):
@@ -56,6 +44,7 @@ class Product(models.Model):
     image = models.ImageField(default='product_pics/None/no-img.jpg')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
+    # total_purchase = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['name']
@@ -63,21 +52,13 @@ class Product(models.Model):
     def __str__(self):
         return '{}: {}'.format(self.name, self.price)
 
-    def total_purchase(self):
+    @property
+    def get_total_purchase(self):
         return PurchasedProduct.objects.filter(product=self.id).aggregate(count=Sum('count'))['count']
 
-# class SubcategoryToProduct(models.Model):
-#     subcategory = models.ForeignKey(
-#         Subcategory, on_delete=models.CASCADE, null=False)
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
-
-#     class Meta:
-#         ordering = ['subcategory']
-
-#     def __str__(self):
-#         subcategory_name = self.subcategory.name
-#         product_name = self.product.name
-#         return '{}: {}'.format(subcategory_name, product_name)
+    # def save(self, *args, **kwargs):
+    #     self.total_purchase = self.get_total_purchase()
+    #     super().save(*args, **kwargs)
 
 
 class Purchase(models.Model):
@@ -89,6 +70,7 @@ class Purchase(models.Model):
     def total_sum(self):
         return sum(item.total() for item in PurchasedProduct.objects.filter(purchase=self.id))
 
+
 class PurchasedProduct(models.Model):
     purchase = models.ForeignKey(
         Purchase, related_name='products', on_delete=models.CASCADE, null=False)
@@ -97,7 +79,7 @@ class PurchasedProduct(models.Model):
 
     class Meta:
         ordering = ['product']
-    
+
     def __str__(self):
         purchase_id = self.id
         product_name = self.product.name
@@ -109,9 +91,14 @@ class PurchasedProduct(models.Model):
     def price(self):
         return self.product.price
 
+    def sale_value(self):
+        return Sale.objects.get(products=self.product).value
+
     def total(self):
-        return self.count * self.price()
-    
+        sale = self.count * self.price() * (self.sale_value() / 100)
+        return (self.count * self.price()) - sale
+
+
 class Favourite(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
@@ -152,7 +139,8 @@ class Contact(models.Model):
 
 class Rating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
-    rate = models.PositiveIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    rate = models.PositiveIntegerField(
+        default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
 
     class Meta:
         ordering = ['product']
@@ -161,49 +149,67 @@ class Rating(models.Model):
         product_name = self.product.name
         return '{}: {}'.format(product_name, self.rate)
 
+
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
     comment = models.TextField(blank=False)
 
     class Meta:
         ordering = ['product']
-    
+
     def __str__(self):
         product_name = self.product.name
         return '{}: {}'.format(product_name, self.comment)
 
+
 class CommentRating(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=False)
-    rate = models.PositiveIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    rate = models.PositiveIntegerField(
+        default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
 
     class Meta:
         ordering = ['comment']
-    
+
     def __str__(self):
         product = self.comment.product.name
         return 'Comment to product "{}" #{} - {}'.format(product, self.comment, self.rate)
 
-# class Bestseller(models.Model):
-#     product = models.ForeignKey(PurchasedProduct, on_delete=models.CASCADE, null=False)
-
-#     class Meta:
-#         ordering = ['product']
-    
-#     def __str__(self):
-#         product_name = self.product.name
-#         return product_name
-    
-#     def by_total_purchases(self):
 
 class Slider(models.Model):
     image = models.ImageField(default='slider_pics/None/no-img.jpg')
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+    product = models.ForeignKey(
+        Product, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         ordering = ['image']
-    
+
     def __str__(self):
         if product:
             product_name = self.product.name
             return 'Images for product {}'.format(product_name)
         return 'There is no product. Slider 0#{}'.format(self.id)
+
+
+class RecommendedProduct(models.Model):
+    date_from = models.DateTimeField(auto_now_add=True)
+    date_to = models.DateTimeField(null=True, blank=True)
+    products = models.ManyToManyField(Product)
+
+    class Meta:
+        ordering = ['date_from']
+
+
+class Sale(models.Model):
+    date_from = models.DateTimeField(auto_now_add=True)
+    date_to = models.DateTimeField(null=True, blank=True)
+    value = models.PositiveIntegerField(
+        default=0, validators=[MinValueValidator(1), MaxValueValidator(100)])
+    products = models.ManyToManyField(Product)
+
+    class Meta:
+        ordering = ['date_from']
+
+
+
+
+

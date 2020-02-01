@@ -16,26 +16,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['name', 'parent']
 
 
-# class SubcategorySerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = Subcategory
-#         fields = ['category', 'parent', 'name']
-
-
-class ProductSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Product
-        fields = ['name', 'description', 'price', 'image', 'brand', 'category', 'total_purchase']
-
-
-# class SubcategoryToProductSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = SubcategoryToProduct
-#         fields = ['subcategory', 'product']
-#         # depth = 1
+# PurchasedProduct.objects.values('product').annotate(number_of_purchases = Sum('count')).order_by('-number_of_purchases')
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -49,8 +30,17 @@ class PurchasedProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PurchasedProduct
-        fields = ['product', 'name', 'price', 'count', 'total']
+        fields = ['product', 'name', 'price', 'count', 'sale_value', 'total']
 
+
+class ProductSerializer(serializers.ModelSerializer):
+    # product_id = serializers.IntegerField(source='product.id', read_only=True)
+    total_purchase = serializers.IntegerField(source='get_total_purchase')
+
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'price', 'image',
+                  'brand', 'category', 'total_purchase']
 
 class PurchaseSerializer(serializers.ModelSerializer):
     contacts = ContactSerializer(many=True)
@@ -65,9 +55,12 @@ class PurchaseSerializer(serializers.ModelSerializer):
         products_data = validated_data.pop('products')
         purchase = Purchase.objects.create(**validated_data)
         for products in products_data:
-            product = PurchasedProduct.objects.get_or_create(purchase=purchase, **products)
+            product = PurchasedProduct.objects.get_or_create(
+                purchase=purchase, **products)
         for contacts in contacts_data:
-            contact = Contact.objects.get_or_create(purchase=purchase, **contacts)
+            contact = Contact.objects.get_or_create(
+                purchase=purchase, **contacts)
+        # PurchasedProduct.objects.get(purchase=purchase).count
         purchase.save()
         return purchase
 
@@ -85,7 +78,7 @@ class FavouriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Favourite
-        fields = ['contacts','products', 'date']
+        fields = ['contacts', 'products', 'date']
 
     def create(self, validated_data):
         contacts_data = validated_data.pop('contacts')
@@ -114,14 +107,30 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['product', 'comment']
 
+
 class CommentRatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommentRating
         fields = ['comment', 'rate']
 
+
 class SliderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Slider
         fields = ['image', 'product']
+
+
+class RecommendedProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecommendedProduct
+        fields = ['date_from', 'date_to', 'products']
+
+
+class SaleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Sale
+        fields = ['date_from', 'date_to', 'value', 'products']

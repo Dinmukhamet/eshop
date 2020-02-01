@@ -26,5 +26,7 @@ class PurchasedProductAdmin(admin.ModelAdmin):
 admin.site.register(Slider)
 admin.site.register(Category)
 admin.site.register(Brand)
+admin.site.register(RecommendedProduct)
+admin.site.register(Sale)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(PurchasedProduct, PurchasedProductAdmin)
