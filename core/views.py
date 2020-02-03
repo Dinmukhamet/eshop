@@ -27,8 +27,8 @@ class ProductView(generics.ListAPIView):
 
 
 class ProductHitView(generics.ListAPIView):
-    queryset = PurchasedProduct.objects.order_by('-count')
-    serializer_class = PurchasedProductSerializer
+    queryset = Product.objects.order_by('-total_purchase')
+    serializer_class = ProductSerializer
 
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):

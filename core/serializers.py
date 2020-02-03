@@ -34,13 +34,15 @@ class PurchasedProductSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    # product_id = serializers.IntegerField(source='product.id', read_only=True)
-    total_purchase = serializers.IntegerField(source='get_total_purchase')
+    total_purchase = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Product
         fields = ['name', 'description', 'price', 'image',
                   'brand', 'category', 'total_purchase']
+    
+    def create(self, validated_data):
+        return Product.objects.create(**validated_data)
 
 class PurchaseSerializer(serializers.ModelSerializer):
     contacts = ContactSerializer(many=True)
@@ -57,6 +59,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
         for products in products_data:
             product = PurchasedProduct.objects.get_or_create(
                 purchase=purchase, **products)
+            # hit = Hit.objects.get_or_create(product=products_data['product'])
         for contacts in contacts_data:
             contact = Contact.objects.get_or_create(
                 purchase=purchase, **contacts)

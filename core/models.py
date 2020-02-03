@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Sum
 from django.core.validators import MaxValueValidator, MinValueValidator
+# from annoying.fields import AutoOneToOneField
 # Create your models here.
 
 
@@ -44,22 +45,14 @@ class Product(models.Model):
     image = models.ImageField(default='product_pics/None/no-img.jpg')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
-    # total_purchase = models.PositiveIntegerField(default=0)
+    total_purchase = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['name']
 
     def __str__(self):
         return '{}: {}'.format(self.name, self.price)
-
-    @property
-    def get_total_purchase(self):
-        return PurchasedProduct.objects.filter(product=self.id).aggregate(count=Sum('count'))['count']
-
-    # def save(self, *args, **kwargs):
-    #     self.total_purchase = self.get_total_purchase()
-    #     super().save(*args, **kwargs)
-
+                       
 
 class Purchase(models.Model):
     date = models.DateTimeField(auto_now_add=True)
@@ -92,11 +85,20 @@ class PurchasedProduct(models.Model):
         return self.product.price
 
     def sale_value(self):
-        return Sale.objects.get(products=self.product).value
+        if Sale.objects.filter(products=self.product):
+            return Sale.objects.get(products=self.product).value
+        else:
+            return 0
 
     def total(self):
         sale = self.count * self.price() * (self.sale_value() / 100)
         return (self.count * self.price()) - sale
+    
+    def save(self, *args, **kwargs):
+        product = self.product
+        product.total_purchase += self.count
+        product.save()
+        super(PurchasedProduct, self).save(*args, **kwargs)
 
 
 class Favourite(models.Model):
@@ -208,8 +210,3 @@ class Sale(models.Model):
 
     class Meta:
         ordering = ['date_from']
-
-
-
-
-
