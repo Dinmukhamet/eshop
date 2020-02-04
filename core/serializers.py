@@ -34,12 +34,11 @@ class PurchasedProductSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    total_purchase = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'image',
-                  'brand', 'category', 'created_at', 'total_purchase']
+        fields = ['name', 'description', 'image',
+                  'brand', 'category', 'current_price', 'created_at']
     
     def create(self, validated_data):
         return Product.objects.create(**validated_data)
