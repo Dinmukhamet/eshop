@@ -54,10 +54,10 @@ class Product(models.Model):
     def __str__(self):
         return '{}'.format(self.name)
 
-    @property
-    def current_price(self):
-        if self.price.all():
-            return self.price.order_by('-created_at')[0].price
+    # @property
+    # def current_price(self):
+    #     if self.price.all():
+    #         return self.price.order_by('-created_at')[0].price
 
 
 class Price(models.Model):
