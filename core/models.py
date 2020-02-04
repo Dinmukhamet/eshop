@@ -41,18 +41,35 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    price = models.IntegerField()
+    # price = models.IntegerField()
     image = models.ImageField(default='product_pics/None/no-img.jpg')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
     total_purchase = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['name']
 
     def __str__(self):
-        return '{}: {}'.format(self.name, self.price)
-                       
+        return '{}'.format(self.name)
+
+    @property
+    def current_price(self):
+        if self.price.all():
+            return self.price.order_by('-created_at')[0].price
+
+
+class Price(models.Model):
+    product = models.ForeignKey(Product, related_name='price', on_delete=models.CASCADE, null=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    date_to = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        product_name = self.product.name
+        return 'Product {}: {}'.format(product_name, self.price)
+
 
 class Purchase(models.Model):
     date = models.DateTimeField(auto_now_add=True)
@@ -82,7 +99,7 @@ class PurchasedProduct(models.Model):
         return self.product.name
 
     def price(self):
-        return self.product.price
+        return float(Price.objects.get(product=self.product).price)
 
     def sale_value(self):
         if Sale.objects.filter(products=self.product):
@@ -93,7 +110,7 @@ class PurchasedProduct(models.Model):
     def total(self):
         sale = self.count * self.price() * (self.sale_value() / 100)
         return (self.count * self.price()) - sale
-    
+
     def save(self, *args, **kwargs):
         product = self.product
         product.total_purchase += self.count

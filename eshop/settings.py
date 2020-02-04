@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django_extensions',
     'jet.dashboard',
     'jet',
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -150,5 +152,8 @@ REST_FRAMEWORK = {
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 django_heroku.settings(locals())
+

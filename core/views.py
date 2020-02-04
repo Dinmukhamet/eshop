@@ -30,6 +30,13 @@ class ProductHitView(generics.ListAPIView):
     queryset = Product.objects.order_by('-total_purchase')
     serializer_class = ProductSerializer
 
+class ProductDateView(generics.ListAPIView):
+    queryset = Product.objects.order_by('-created_at')
+    serializer_class = ProductSerializer
+
+class ProductPriceView(generics.ListAPIView):
+    queryset = Price.objects.all()
+    serializer_class = PriceSerializer
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
