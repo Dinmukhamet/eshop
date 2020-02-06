@@ -45,7 +45,6 @@ class Product(models.Model):
     image = models.ImageField(default='product_pics/None/no-img.jpg')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
-    total_purchase = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -58,6 +57,9 @@ class Product(models.Model):
     def current_price(self):
         if self.price.all():
             return self.price.order_by('-created_at')[0].price
+        
+    def get_id(self):
+        return self.id
 
 
 class Price(models.Model):
