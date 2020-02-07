@@ -146,3 +146,77 @@ cwd: ~/Desktop/eshop/eshop
 ------------------------------------------------------------------
 Your code has been rated at 5.11/10 (previous run: 5.11/10, +0.00)
 
+> /usr/bin/python3 ~/.vscode/extensions/ms-python.python-2020.1.58038/pythonFiles/interpreterInfo.py
+> /usr/bin/python3 ~/.vscode/extensions/ms-python.python-2020.1.58038/pythonFiles/interpreterInfo.py
+> /usr/bin/python3 -m pylint --disable=all --enable=F,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,unused-wildcard-import,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode,E0001,E0011,E0012,E0100,E0101,E0102,E0103,E0104,E0105,E0107,E0108,E0110,E0111,E0112,E0113,E0114,E0115,E0116,E0117,E0118,E0202,E0203,E0211,E0213,E0236,E0237,E0238,E0239,E0240,E0241,E0301,E0302,E0303,E0401,E0402,E0601,E0602,E0603,E0604,E0611,E0632,E0633,E0701,E0702,E0703,E0704,E0710,E0711,E0712,E1003,E1101,E1102,E1111,E1120,E1121,E1123,E1124,E1125,E1126,E1127,E1128,E1129,E1130,E1131,E1132,E1133,E1134,E1135,E1136,E1137,E1138,E1139,E1200,E1201,E1205,E1206,E1300,E1301,E1302,E1303,E1304,E1305,E1306,E1310,E1700,E1701 --msg-template='{line},{column},{category},{symbol}:{msg}' --reports=n --output-format=text ~/Desktop/eshop/eshop/core/models.py
+cwd: ~/Desktop/eshop/eshop
+> /usr/bin/python3 -m pylint --disable=all --enable=F,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,unused-wildcard-import,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode,E0001,E0011,E0012,E0100,E0101,E0102,E0103,E0104,E0105,E0107,E0108,E0110,E0111,E0112,E0113,E0114,E0115,E0116,E0117,E0118,E0202,E0203,E0211,E0213,E0236,E0237,E0238,E0239,E0240,E0241,E0301,E0302,E0303,E0401,E0402,E0601,E0602,E0603,E0604,E0611,E0632,E0633,E0701,E0702,E0703,E0704,E0710,E0711,E0712,E1003,E1101,E1102,E1111,E1120,E1121,E1123,E1124,E1125,E1126,E1127,E1128,E1129,E1130,E1131,E1132,E1133,E1134,E1135,E1136,E1137,E1138,E1139,E1200,E1201,E1205,E1206,E1300,E1301,E1302,E1303,E1304,E1305,E1306,E1310,E1700,E1701 --msg-template='{line},{column},{category},{symbol}:{msg}' --reports=n --output-format=text ~/Desktop/eshop/eshop/core/models.py
+cwd: ~/Desktop/eshop/eshop
+##########Linting Output - pylint##########
+************* Module core.models
+59,11,error,no-member:Instance of 'Product' has no 'price' member
+60,19,error,no-member:Instance of 'Product' has no 'price' member
+63,15,error,no-member:Instance of 'Product' has no 'id' member
+84,44,error,no-member:Class 'PurchasedProduct' has no 'objects' member
+84,85,error,no-member:Instance of 'Purchase' has no 'id' member
+97,22,error,no-member:Instance of 'PurchasedProduct' has no 'id' member
+105,21,error,no-member:Class 'Price' has no 'objects' member
+108,11,error,no-member:Class 'Sale' has no 'objects' member
+109,19,error,no-member:Class 'Sale' has no 'objects' member
+119,8,error,no-member:Instance of 'ForeignKey' has no 'total_purchase' member
+120,8,error,no-member:Instance of 'ForeignKey' has no 'save' member
+196,18,error,no-member:Instance of 'ForeignKey' has no 'product' member
+209,11,error,undefined-variable:Undefined variable 'product'
+212,57,error,no-member:Instance of 'Slider' has no 'id' member
+
+------------------------------------------------------------------
+Your code has been rated at 5.14/10 (previous run: 5.10/10, +0.03)
+
+> /usr/bin/python3 -m pylint --disable=all --enable=F,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,unused-wildcard-import,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode,E0001,E0011,E0012,E0100,E0101,E0102,E0103,E0104,E0105,E0107,E0108,E0110,E0111,E0112,E0113,E0114,E0115,E0116,E0117,E0118,E0202,E0203,E0211,E0213,E0236,E0237,E0238,E0239,E0240,E0241,E0301,E0302,E0303,E0401,E0402,E0601,E0602,E0603,E0604,E0611,E0632,E0633,E0701,E0702,E0703,E0704,E0710,E0711,E0712,E1003,E1101,E1102,E1111,E1120,E1121,E1123,E1124,E1125,E1126,E1127,E1128,E1129,E1130,E1131,E1132,E1133,E1134,E1135,E1136,E1137,E1138,E1139,E1200,E1201,E1205,E1206,E1300,E1301,E1302,E1303,E1304,E1305,E1306,E1310,E1700,E1701 --msg-template='{line},{column},{category},{symbol}:{msg}' --reports=n --output-format=text ~/Desktop/eshop/eshop/core/models.py
+cwd: ~/Desktop/eshop/eshop
+> /usr/bin/python3 -m pylint --disable=all --enable=F,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,unused-wildcard-import,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode,E0001,E0011,E0012,E0100,E0101,E0102,E0103,E0104,E0105,E0107,E0108,E0110,E0111,E0112,E0113,E0114,E0115,E0116,E0117,E0118,E0202,E0203,E0211,E0213,E0236,E0237,E0238,E0239,E0240,E0241,E0301,E0302,E0303,E0401,E0402,E0601,E0602,E0603,E0604,E0611,E0632,E0633,E0701,E0702,E0703,E0704,E0710,E0711,E0712,E1003,E1101,E1102,E1111,E1120,E1121,E1123,E1124,E1125,E1126,E1127,E1128,E1129,E1130,E1131,E1132,E1133,E1134,E1135,E1136,E1137,E1138,E1139,E1200,E1201,E1205,E1206,E1300,E1301,E1302,E1303,E1304,E1305,E1306,E1310,E1700,E1701 --msg-template='{line},{column},{category},{symbol}:{msg}' --reports=n --output-format=text ~/Desktop/eshop/eshop/core/models.py
+cwd: ~/Desktop/eshop/eshop
+##########Linting Output - pylint##########
+************* Module core.models
+59,11,error,no-member:Instance of 'Product' has no 'price' member
+60,19,error,no-member:Instance of 'Product' has no 'price' member
+63,15,error,no-member:Instance of 'Product' has no 'id' member
+84,44,error,no-member:Class 'PurchasedProduct' has no 'objects' member
+84,85,error,no-member:Instance of 'Purchase' has no 'id' member
+97,22,error,no-member:Instance of 'PurchasedProduct' has no 'id' member
+105,21,error,no-member:Class 'Price' has no 'objects' member
+108,11,error,no-member:Class 'Sale' has no 'objects' member
+109,19,error,no-member:Class 'Sale' has no 'objects' member
+119,8,error,no-member:Instance of 'ForeignKey' has no 'total_purchase' member
+120,8,error,no-member:Instance of 'ForeignKey' has no 'save' member
+196,18,error,no-member:Instance of 'ForeignKey' has no 'product' member
+212,57,error,no-member:Instance of 'Slider' has no 'id' member
+
+------------------------------------------------------------------
+Your code has been rated at 5.49/10 (previous run: 5.14/10, +0.35)
+
+> /usr/bin/python3 -m pylint --disable=all --enable=F,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,unused-wildcard-import,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode,E0001,E0011,E0012,E0100,E0101,E0102,E0103,E0104,E0105,E0107,E0108,E0110,E0111,E0112,E0113,E0114,E0115,E0116,E0117,E0118,E0202,E0203,E0211,E0213,E0236,E0237,E0238,E0239,E0240,E0241,E0301,E0302,E0303,E0401,E0402,E0601,E0602,E0603,E0604,E0611,E0632,E0633,E0701,E0702,E0703,E0704,E0710,E0711,E0712,E1003,E1101,E1102,E1111,E1120,E1121,E1123,E1124,E1125,E1126,E1127,E1128,E1129,E1130,E1131,E1132,E1133,E1134,E1135,E1136,E1137,E1138,E1139,E1200,E1201,E1205,E1206,E1300,E1301,E1302,E1303,E1304,E1305,E1306,E1310,E1700,E1701 --msg-template='{line},{column},{category},{symbol}:{msg}' --reports=n --output-format=text ~/Desktop/eshop/eshop/core/serializers.py
+cwd: ~/Desktop/eshop/eshop
+> /usr/bin/python3 -m pylint --disable=all --enable=F,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,unused-wildcard-import,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode,E0001,E0011,E0012,E0100,E0101,E0102,E0103,E0104,E0105,E0107,E0108,E0110,E0111,E0112,E0113,E0114,E0115,E0116,E0117,E0118,E0202,E0203,E0211,E0213,E0236,E0237,E0238,E0239,E0240,E0241,E0301,E0302,E0303,E0401,E0402,E0601,E0602,E0603,E0604,E0611,E0632,E0633,E0701,E0702,E0703,E0704,E0710,E0711,E0712,E1003,E1101,E1102,E1111,E1120,E1121,E1123,E1124,E1125,E1126,E1127,E1128,E1129,E1130,E1131,E1132,E1133,E1134,E1135,E1136,E1137,E1138,E1139,E1200,E1201,E1205,E1206,E1300,E1301,E1302,E1303,E1304,E1305,E1306,E1310,E1700,E1701 --msg-template='{line},{column},{category},{symbol}:{msg}' --reports=n --output-format=text ~/Desktop/eshop/eshop/core/serializers.py
+cwd: ~/Desktop/eshop/eshop
+##########Linting Output - pylint##########
+************* Module core.serializers
+44,15,error,no-member:Class 'Product' has no 'objects' member
+63,19,error,no-member:Class 'Purchase' has no 'objects' member
+65,22,error,no-member:Class 'PurchasedProduct' has no 'objects' member
+69,22,error,no-member:Class 'Contact' has no 'objects' member
+65,12,warning,unused-variable:Unused variable 'product'
+69,12,warning,unused-variable:Unused variable 'contact'
+94,20,error,no-member:Class 'Favourite' has no 'objects' member
+96,22,error,no-member:Class 'FavouriteProduct' has no 'objects' member
+99,22,error,no-member:Class 'Contact' has no 'objects' member
+96,12,warning,unused-variable:Unused variable 'product'
+99,12,warning,unused-variable:Unused variable 'contact'
+2,0,warning,unused-wildcard-import:Unused import models from wildcard import
+2,0,warning,unused-wildcard-import:Unused import Sum from wildcard import
+2,0,warning,unused-wildcard-import:Unused import MaxValueValidator from wildcard import
+2,0,warning,unused-wildcard-import:Unused import MinValueValidator from wildcard import
+
+------------------------------------------------------------------
+Your code has been rated at 5.11/10 (previous run: 5.11/10, +0.00)
+

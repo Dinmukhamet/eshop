@@ -46,6 +46,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
     created_at = models.DateTimeField(auto_now_add=True)
+    quantity = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['name']
@@ -205,7 +206,7 @@ class Slider(models.Model):
         ordering = ['image']
 
     def __str__(self):
-        if product:
+        if self.product:
             product_name = self.product.name
             return 'Images for product {}'.format(product_name)
         return 'There is no product. Slider 0#{}'.format(self.id)
