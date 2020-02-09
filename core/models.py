@@ -46,7 +46,8 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
     created_at = models.DateTimeField(auto_now_add=True)
-    quantity = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=1)
+    is_purchased = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['name']

@@ -1401,5 +1401,19 @@
         }
     },
     "theme": "vs-dark",
-    "themeBackground": "#1e1e1e"
+    "themeBackground": "#1e1e1e",
+    "windowsState": {
+        "lastActiveWindow": {
+            "folder": "file:///home/dinmukhamet/Desktop/eshop/eshop",
+            "backupPath": "/home/dinmukhamet/Desktop/eshop/eshop/~vscode-root/Backups/978f2623f1a6435a09cc0bdca24b727a",
+            "uiState": {
+                "mode": 0,
+                "x": 448,
+                "y": 186,
+                "width": 1024,
+                "height": 768
+            }
+        },
+        "openedWindows": []
+    }
 }
