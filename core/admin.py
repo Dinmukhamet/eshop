@@ -9,7 +9,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'description',
                     'image', 'quantity', 'brand')
     fieldsets = [
-        (None, {'fields': (('name', 'description'), 'image', 'category', 'brand')})
+        (None, {'fields': (('name', 'description'), 'image', 'category', 'quantity', 'brand')})
     ]
 
 
