@@ -38,16 +38,19 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['get_id', 'name', 'description', 'image',
-                  'brand', 'category', 'current_price', 'quantity', 'is_purchased', 'created_at']
-    
+                  'brand', 'category', 'current_price', 'quantity', 'is_purchased', 'created_at',
+                  'total_purchase']
+
     def create(self, validated_data):
         return Product.objects.create(**validated_data)
+
 
 class PriceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Price
         fields = ['product', 'price', 'created_at', 'date_to']
+
 
 class PurchaseSerializer(serializers.ModelSerializer):
     contacts = ContactSerializer(many=True)
