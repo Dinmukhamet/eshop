@@ -221,6 +221,9 @@ class RecommendedProduct(models.Model):
     class Meta:
         ordering = ['date_from']
 
+    def __str__(self):
+        return 'Recommended Product object #{}'.format(self.id)
+
 
 class Sale(models.Model):
     date_from = models.DateTimeField(auto_now_add=True)
