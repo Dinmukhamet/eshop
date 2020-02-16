@@ -15,12 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import RedirectView
 # from jet.dashboard.dashboard_modules import google_analytics_views
 
 urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')), 
     path('jet_api/', include('jet_django.urls')),
+    path('jet_api/panel/', RedirectView.as_view(url='http://app.jetadmin.io/app/eshop_dimash/'), name='jet-bridge'),
     path('admin/', admin.site.urls),
     path('', include('core.urls'))
 ]
