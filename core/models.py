@@ -41,7 +41,7 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    image = models.ImageField(default='product_pics/None/no-img.jpg')
+    image = models.URLField(max_length=254)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -164,6 +164,7 @@ class Rating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
     rate = models.PositiveIntegerField(
         default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['product']
@@ -176,6 +177,7 @@ class Rating(models.Model):
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
     comment = models.TextField(blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['product']
@@ -189,6 +191,7 @@ class CommentRating(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=False)
     rate = models.PositiveIntegerField(
         default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['comment']
@@ -199,7 +202,7 @@ class CommentRating(models.Model):
 
 
 class Slider(models.Model):
-    image = models.ImageField(default='slider_pics/None/no-img.jpg')
+    image = models.URLField(max_length=254)
     product = models.ForeignKey(
         Product, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -210,7 +213,7 @@ class Slider(models.Model):
         if self.product:
             product_name = self.product.name
             return 'Images for product {}'.format(product_name)
-        return 'There is no product. Slider 0#{}'.format(self.id)
+        return 'There is no product. Slider #{}'.format(self.id)
 
 
 class RecommendedProduct(models.Model):

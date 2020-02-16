@@ -109,21 +109,21 @@ class RatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rating
-        fields = ['product', 'rate']
+        fields = ['product', 'rate', 'created_at']
 
 
 class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['product', 'comment']
+        fields = ['product', 'comment', 'created_at']
 
 
 class CommentRatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommentRating
-        fields = ['comment', 'rate']
+        fields = ['comment', 'rate', 'created_at']
 
 
 class SliderSerializer(serializers.ModelSerializer):
