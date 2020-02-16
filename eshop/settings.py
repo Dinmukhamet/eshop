@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django_filters',
     'whitenoise.runserver_nostatic',
     'drf_yasg',
+    'jet_django',
     # my app
     'core',
 ]
@@ -154,6 +155,9 @@ MEDIA_URL = '/media/'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+
+JET_PROJECT = 'eshop_neobis'
+JET_TOKEN = '49aaefc3-fa19-4817-9cb5-28321a834849'
 
 django_heroku.settings(locals())
 
