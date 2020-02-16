@@ -136,6 +136,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+JET_PROJECT = 'eshop_dimash'
+JET_TOKEN = '80f42f69-235f-428e-84ee-a622dd241e7b'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -156,8 +158,6 @@ MEDIA_URL = '/media/'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-JET_PROJECT = 'eshop_neobis'
-JET_TOKEN = '49aaefc3-fa19-4817-9cb5-28321a834849'
 
 django_heroku.settings(locals())
 
