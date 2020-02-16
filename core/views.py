@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, generics
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Max
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 from .serializers import *
@@ -42,17 +43,17 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-
+@csrf_exempt
 class ContactView(generics.ListCreateAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
 
-
+@csrf_exempt
 class PurchasedProductView(generics.ListCreateAPIView):
     queryset = PurchasedProduct.objects.all()
     serializer_class = PurchasedProductSerializer
 
-
+@csrf_exempt
 class PurchaseView(generics.ListCreateAPIView):
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
@@ -62,27 +63,27 @@ class PurchaseDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
 
-
+@csrf_exempt
 class RatingView(generics.ListCreateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
 
-
+@csrf_exempt
 class CommentView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
-
+@csrf_exempt
 class CommentRatingView(generics.ListCreateAPIView):
     queryset = CommentRating.objects.all()
     serializer_class = CommentRatingSerializer
 
-
+@csrf_exempt
 class FavouriteView(generics.ListCreateAPIView):
     queryset = Favourite.objects.all()
     serializer_class = FavouriteSerializer
 
-
+@csrf_exempt
 class FavouriteProductView(generics.ListCreateAPIView):
     queryset = FavouriteProduct.objects.all()
     serializer_class = FavouriteProductSerializer
