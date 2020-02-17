@@ -31,13 +31,16 @@ class ProductHitView(generics.ListAPIView):
     queryset = Product.objects.order_by('-total_purchase')
     serializer_class = ProductSerializer
 
+
 class ProductDateView(generics.ListAPIView):
     queryset = Product.objects.order_by('-created_at')
     serializer_class = ProductSerializer
 
+
 class ProductPriceView(generics.ListAPIView):
     queryset = Price.objects.all()
     serializer_class = PriceSerializer
+
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
@@ -77,16 +80,6 @@ class CommentView(generics.ListCreateAPIView):
 class CommentRatingView(generics.ListCreateAPIView):
     queryset = CommentRating.objects.all()
     serializer_class = CommentRatingSerializer
-
-
-class FavouriteView(generics.ListCreateAPIView):
-    queryset = Favourite.objects.all()
-    serializer_class = FavouriteSerializer
-
-
-class FavouriteProductView(generics.ListCreateAPIView):
-    queryset = FavouriteProduct.objects.all()
-    serializer_class = FavouriteProductSerializer
 
 
 class SliderView(generics.ListAPIView):

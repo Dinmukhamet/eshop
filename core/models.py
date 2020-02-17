@@ -122,31 +122,9 @@ class PurchasedProduct(models.Model):
         super(PurchasedProduct, self).save(*args, **kwargs)
 
 
-class Favourite(models.Model):
-    date = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['date']
-
-
-class FavouriteProduct(models.Model):
-    favourite = models.ForeignKey(
-        Favourite, related_name='products', on_delete=models.CASCADE, null=False)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
-
-    class Meta:
-        ordering = ['favourite']
-
-    def __str__(self):
-        product_name = self.product.name
-        return 'Favourite ID: {} - {}'.format(self.favourite, product_name)
-
-
 class Contact(models.Model):
     purchase = models.ForeignKey(
         Purchase, related_name='contacts', on_delete=models.CASCADE, null=True)
-    favourite = models.ForeignKey(
-        Favourite, related_name='contacts', on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
     phone_number = models.CharField(max_length=255)

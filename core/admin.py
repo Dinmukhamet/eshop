@@ -21,7 +21,7 @@ class PurchasedProductAdmin(admin.ModelAdmin):
     ]
 
 class ContactAdmin(admin.ModelAdmin):
-    list_filter = ('purchase', 'favourite')
+    list_filter = ('purchase',)
     list_display = ('name', 'email', 'phone_number', 'address', 'comment')
     fieldsets = [
         (None, {'fields': (('name', 'email', 'phone_number', 'address', 'comment'))})

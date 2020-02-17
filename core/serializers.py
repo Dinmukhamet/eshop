@@ -41,10 +41,6 @@ class ProductSerializer(serializers.ModelSerializer):
                   'brand', 'category', 'current_price', 'quantity', 'is_purchased', 'created_at',
                   'total_purchase']
 
-    def create(self, validated_data):
-        return Product.objects.create(**validated_data)
-
-
 class PriceSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -74,35 +70,6 @@ class PurchaseSerializer(serializers.ModelSerializer):
         # PurchasedProduct.objects.get(purchase=purchase).count
         purchase.save()
         return purchase
-
-
-class FavouriteProductSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = FavouriteProduct
-        fields = ['favourite', 'product']
-
-
-class FavouriteSerializer(serializers.ModelSerializer):
-    contacts = ContactSerializer(many=True)
-    products = PurchasedProductSerializer(many=True)
-
-    class Meta:
-        model = Favourite
-        fields = ['contacts', 'products', 'date']
-
-    def create(self, validated_data):
-        contacts_data = validated_data.pop('contacts')
-        products_data = validated_data.pop('products')
-        favourite = Favourite.objects.create(**validated_data)
-        for products in products_data:
-            product = FavouriteProduct.objects.get_or_create(
-                favourite=favourite, **products)
-        for contacts in contacts_data:
-            contact = Contact.objects.get_or_create(
-                favourite=favourite, **contacts)
-        favourite.save()
-        return favourite
 
 
 class RatingSerializer(serializers.ModelSerializer):
