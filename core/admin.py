@@ -13,12 +13,12 @@ class ProductAdmin(admin.ModelAdmin):
     ]
 
 
-class PurchasedProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'count', 'total')
+# class PurchasedProductAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'price', 'count', 'total')
 
-    fieldsets = [
-        (None, {'fields': ('name', 'price', 'count', 'total')})
-    ]
+#     fieldsets = [
+#         (None, {'fields': ('name', 'price', 'count', 'total')})
+#     ]
 
 class ContactAdmin(admin.ModelAdmin):
     list_filter = ('purchase',)
@@ -49,4 +49,5 @@ admin.site.register(Contact, ContactAdmin)
 admin.site.register(RecommendedProduct)
 admin.site.register(Sale, SaleAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(PurchasedProduct, PurchasedProductAdmin)
+admin.site.register(PurchasedProduct)
+# , PurchasedProductAdmin)
