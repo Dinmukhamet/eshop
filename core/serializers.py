@@ -30,7 +30,7 @@ class PurchasedProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PurchasedProduct
-        fields = ['product', 'name', 'price', 'count', 'sale_value', 'total']
+        fields = ['product', 'name', 'price', 'count', 'sale_value', 'total', 'created_at']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -54,7 +54,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Purchase
-        fields = ['date', 'contacts', 'products', 'total_sum']
+        fields = ['contacts', 'products', 'total_sum']
 
     def create(self, validated_data):
         contacts_data = validated_data.pop('contacts')
@@ -111,4 +111,4 @@ class SaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sale
-        fields = ['date_from', 'date_to', 'value', 'products']
+        fields = ['date_from', 'date_to', 'value', 'products', 'created']

@@ -76,10 +76,10 @@ class Price(models.Model):
 
 
 class Purchase(models.Model):
-    date = models.DateTimeField(auto_now_add=True)
+    # date = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ['date']
+    # class Meta:
+    #     ordering = ['date']
 
     def total_sum(self):
         return sum(item.total() for item in PurchasedProduct.objects.filter(purchase=self.id))
@@ -90,6 +90,7 @@ class PurchasedProduct(models.Model):
         Purchase, related_name='products', on_delete=models.CASCADE, null=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
     count = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['product']
@@ -207,11 +208,19 @@ class RecommendedProduct(models.Model):
 
 
 class Sale(models.Model):
-    date_from = models.DateTimeField(auto_now_add=True)
+    date_from = models.DateTimeField(null=True, blank=True)
     date_to = models.DateTimeField(null=True, blank=True)
     value = models.PositiveIntegerField(
         default=0, validators=[MinValueValidator(1), MaxValueValidator(100)])
     products = models.ManyToManyField(Product)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['date_from']
+
+class SaleSummary(PurchasedProduct):
+    
+    class Meta:
+        proxy = True
+        verbose_name = 'Sale Summary'
+        verbose_name_plural = 'Sales Summary'

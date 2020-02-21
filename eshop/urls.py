@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
-# from jet.dashboard.dashboard_modules import google_analytics_views
 
 urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
