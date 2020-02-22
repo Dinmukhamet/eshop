@@ -43,7 +43,7 @@ class SaleSummaryAdmin(admin.ModelAdmin):
 
         metrics = {
             'total': Count('count'),
-            'total_sales': Sum('product__price__price'),
+            'total_sales': Sum('product__price'),
         }
 
         response.context_data['summary'] = list(
@@ -59,7 +59,7 @@ class SaleSummaryAdmin(admin.ModelAdmin):
 
         response.context_data['period'] = period
 
-        summary_over_time = qs.annotate(period=Trunc('created_at', period, output_field=DateTimeField())).values('period').annotate(total=Sum('product__price__price')).order_by('period')
+        summary_over_time = qs.annotate(period=Trunc('created_at', period, output_field=DateTimeField())).values('period').annotate(total=Sum('product__price')).order_by('period')
 
         summary_range = summary_over_time.aggregate(
             low=Min('total'), high=Max('total'))

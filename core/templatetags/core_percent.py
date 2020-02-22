@@ -1,5 +1,5 @@
 from django import template
-
+from decimal import *
 
 register = template.Library()
 

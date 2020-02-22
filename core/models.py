@@ -99,7 +99,7 @@ class PurchasedProduct(models.Model):
         return self.product.name
 
     def price(self):
-        return float(Price.objects.get(product=self.product).price)
+        return float(self.product.price)   
 
     def sale_value(self):
         if Sale.objects.filter(products=self.product):
