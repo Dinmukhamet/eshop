@@ -47,9 +47,9 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 
 
-class ContactView(generics.ListCreateAPIView):
-    queryset = Contact.objects.all()
-    serializer_class = ContactSerializer
+class CustomerInfoView(generics.ListCreateAPIView):
+    queryset = CustomerInfo.objects.all()
+    serializer_class = CustomerInfoSerializer
 
 
 class PurchasedProductView(generics.ListCreateAPIView):

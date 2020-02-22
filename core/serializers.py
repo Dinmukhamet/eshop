@@ -6,55 +6,55 @@ class BrandSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Brand
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['name', 'parent']
+        fields = ['id', 'name', 'parent']
 
 
 # PurchasedProduct.objects.values('product').annotate(number_of_purchases = Sum('count')).order_by('-number_of_purchases')
 
 
-class ContactSerializer(serializers.ModelSerializer):
+class CustomerInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Contact
-        fields = ['name', 'email', 'phone_number', 'address', 'comment']
+        model = CustomerInfo
+        fields = ['id', 'name', 'email', 'phone_number', 'address', 'comment']
 
 
 class PurchasedProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PurchasedProduct
-        fields = ['product', 'name', 'price', 'count', 'sale_value', 'total', 'created_at']
+        fields = ['id', 'product', 'name', 'price', 'count', 'sale_value', 'total', 'created_at']
 
 
 class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['get_id', 'name', 'description', 'image',
-                  'brand', 'category', 'current_price', 'quantity', 'is_purchased', 'created_at',
+        fields = ['id', 'name', 'description', 'image',
+                  'brand', 'category', 'current_price', 'created_at',
                   'total_purchase']
 
 class PriceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Price
-        fields = ['product', 'price', 'created_at', 'date_to']
+        fields = ['id', 'product', 'price', 'created_at', 'date_to']
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
-    contacts = ContactSerializer(many=True)
+    contacts = CustomerInfoSerializer(many=True)
     products = PurchasedProductSerializer(many=True)
 
     class Meta:
         model = Purchase
-        fields = ['contacts', 'products', 'total_sum']
+        fields = ['id', 'contacts', 'products', 'total_sum']
 
     def create(self, validated_data):
         contacts_data = validated_data.pop('contacts')
@@ -65,7 +65,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
                 purchase=purchase, **products)
             # hit = Hit.objects.get_or_create(product=products_data['product'])
         for contacts in contacts_data:
-            contact = Contact.objects.get_or_create(
+            contact = CustomerInfo.objects.get_or_create(
                 purchase=purchase, **contacts)
         # PurchasedProduct.objects.get(purchase=purchase).count
         purchase.save()
@@ -76,39 +76,39 @@ class RatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rating
-        fields = ['product', 'rate', 'created_at']
+        fields = ['id', 'product', 'rate', 'created_at']
 
 
 class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['product', 'comment', 'created_at']
+        fields = ['id', 'product', 'comment', 'created_at']
 
 
 class CommentRatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommentRating
-        fields = ['comment', 'rate', 'created_at']
+        fields = ['id', 'comment', 'rate', 'created_at']
 
 
 class SliderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Slider
-        fields = ['image', 'product']
+        fields = ['id', 'image', 'product']
 
 
 class RecommendedProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RecommendedProduct
-        fields = ['date_from', 'date_to', 'products']
+        fields = ['id', 'date_from', 'date_to', 'products']
 
 
 class SaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sale
-        fields = ['date_from', 'date_to', 'value', 'products', 'created']
+        fields = ['id', 'date_from', 'date_to', 'value', 'products', 'created']

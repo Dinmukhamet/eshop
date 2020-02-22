@@ -47,7 +47,7 @@ urlpatterns = [
          views.RecommendedProductView.as_view(), name='recommended'),
     path('product/sales/', views.SaleView.as_view(), name='sales'),
     path('product/<int:pk>/', views.ProductDetailView.as_view()),
-    path('contact/', views.ContactView.as_view(), name='contact'),
+    path('contact/', views.CustomerInfoView.as_view(), name='contact'),
     path('purchased_product/', views.PurchasedProductView.as_view(),
          name='purchased_product'),
     path('purchase/', views.PurchaseView.as_view(), name='purchase'),

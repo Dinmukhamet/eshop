@@ -45,8 +45,6 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
     created_at = models.DateTimeField(auto_now_add=True)
-    quantity = models.IntegerField(default=1)
-    is_purchased = models.BooleanField(default=False)
     total_purchase = models.PositiveIntegerField(default=0)
 
     class Meta:
@@ -59,10 +57,6 @@ class Product(models.Model):
     def current_price(self):
         if self.price.all():
             return self.price.order_by('-created_at')[0].price
-        
-    def get_id(self):
-        return self.id
-
 
 class Price(models.Model):
     product = models.ForeignKey(Product, related_name='price', on_delete=models.CASCADE, null=False)
@@ -123,7 +117,7 @@ class PurchasedProduct(models.Model):
         super(PurchasedProduct, self).save(*args, **kwargs)
 
 
-class Contact(models.Model):
+class CustomerInfo(models.Model):
     purchase = models.ForeignKey(
         Purchase, related_name='contacts', on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)

@@ -60,8 +60,7 @@ class SaleSummaryAdmin(admin.ModelAdmin):
 
         response.context_data['period'] = period
 
-        summary_over_time = qs.annotate(period=Trunc('created_at', period, output_field=DateTimeField(
-        ))).values('period').annotate(total=Sum('product__price__price')).order_by('period')
+        summary_over_time = qs.annotate(period=Trunc('created_at', period, output_field=DateTimeField())).values('period').annotate(total=Sum('product__price__price')).order_by('period')
 
         summary_range = summary_over_time.aggregate(
             low=Min('total'), high=Max('total'))
@@ -72,14 +71,14 @@ class SaleSummaryAdmin(admin.ModelAdmin):
         response.context_data['summary_over_time'] = [{
             'period': x['period'], 
             'total': x['total'] or 0, 
-            'pct': 100
+            'pct': ((x['total'] or 0) - low) / (high - low) * 100
             if high > low else 0,
         } for x in summary_over_time]
 
         return response
 
 
-class ContactAdmin(admin.ModelAdmin):
+class CustomerInfoAdmin(admin.ModelAdmin):
     list_filter = ('purchase',)
     list_display = ('name', 'email', 'phone_number', 'address', 'comment')
     fieldsets = [
@@ -114,7 +113,7 @@ admin.site.register(Slider)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand)
 admin.site.register(Price)
-admin.site.register(Contact, ContactAdmin)
+admin.site.register(CustomerInfo, CustomerInfoAdmin)
 admin.site.register(RecommendedProduct)
 admin.site.register(Sale, SaleAdmin)
 admin.site.register(Product, ProductAdmin)
