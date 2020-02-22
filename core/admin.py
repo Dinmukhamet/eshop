@@ -108,9 +108,6 @@ class SessionAdmin(admin.ModelAdmin):
 
 class PurchaseAdmin(admin.ModelAdmin):
     list_display = ('id', 'display_customer_info', 'display_purchased_product')
-    fieldsets = [
-        (None, {'fields': (('id', 'display_customer_info', 'display_purchased_product'))})
-    ]
 
 
 admin.site.register(Session, SessionAdmin)
