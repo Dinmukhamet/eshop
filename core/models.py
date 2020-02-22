@@ -207,11 +207,23 @@ class Sale(models.Model):
     date_to = models.DateTimeField(null=True, blank=True)
     value = models.PositiveIntegerField(
         default=0, validators=[MinValueValidator(1), MaxValueValidator(100)])
-    products = models.ManyToManyField(Product)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['date_from']
+
+class ProductToSale(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
+    sale = models.ForeignKey(Sale, related_name='products', on_delete=models.CASCADE, null=False)
+
+    class Meta:
+        ordering = ['product']
+
+    def new_price(self):
+        old_price = self.product.price
+        sale_value = self.sale.value
+        return old_price * sale_value / 100
+
 
 class SaleSummary(PurchasedProduct):
     

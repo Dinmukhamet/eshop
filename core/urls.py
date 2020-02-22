@@ -46,6 +46,7 @@ urlpatterns = [
     path('product/recommended/',
          views.RecommendedProductView.as_view(), name='recommended'),
     path('product/sales/', views.SaleView.as_view(), name='sales'),
+    path('product_to_sales/', views.ProductToSaleView.as_view()),
     path('product/<int:pk>/', views.ProductDetailView.as_view()),
     path('contact/', views.CustomerInfoView.as_view(), name='contact'),
     path('purchased_product/', views.PurchasedProductView.as_view(),

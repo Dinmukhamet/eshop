@@ -106,9 +106,23 @@ class RecommendedProductSerializer(serializers.ModelSerializer):
         model = RecommendedProduct
         fields = ['id', 'date_from', 'date_to', 'products']
 
-
+class ProductToSaleSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ProductToSale
+        fields = ['sale', 'product', 'new_price']
+    
 class SaleSerializer(serializers.ModelSerializer):
+    products = ProductToSaleSerializer(many=True)
 
     class Meta:
         model = Sale
         fields = ['id', 'date_from', 'date_to', 'value', 'products', 'created']
+
+    def create(self, validated_data):
+        products_data = validated_data.pop('products')
+        sale = Sale.objects.create(**validated_data)
+        for products in products_data:
+            product = ProductToSale.objects.create(sale=sale, **products)
+        sale.save()
+        return sale
