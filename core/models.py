@@ -219,6 +219,9 @@ class ProductToSale(models.Model):
     class Meta:
         ordering = ['product']
     
+    def product_name(self):
+        return self.product.name
+    
     def old_price(self):
         return self.product.price
 
