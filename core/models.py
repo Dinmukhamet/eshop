@@ -223,7 +223,7 @@ class ProductToSale(models.Model):
         return self.product.price
 
     def new_price(self):
-        price = old_price()
+        price = self.old_price()
         sale_value = self.sale.value
         return price - (price * sale_value / 100)
     
