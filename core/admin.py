@@ -106,16 +106,21 @@ class SessionAdmin(admin.ModelAdmin):
         return obj.get_decoded()
     list_display = ['session_key', '_session_data', 'expire_date']
 
+class PurchaseAdmin(admin.ModelAdmin):
+    list_display = ('id', 'display_customer_info', 'display_purchased_product')
+    fieldsets = [
+        (None, {'fields': (('id', 'display_customer_info', 'display_purchased_product'))})
+    ]
+
 
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Slider)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand)
-# admin.site.register(Price)
+admin.site.register(Purchase, PurchaseAdmin)
 admin.site.register(CustomerInfo, CustomerInfoAdmin)
 admin.site.register(RecommendedProduct)
 admin.site.register(Sale, SaleAdmin)
 admin.site.register(ProductToSale)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(PurchasedProduct)
-# , PurchasedProductAdmin)

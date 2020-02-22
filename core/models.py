@@ -79,6 +79,15 @@ class Purchase(models.Model):
     def total_sum(self):
         return sum(item.total() for item in PurchasedProduct.objects.filter(purchase=self.id))
 
+    def display_customer_info(self):
+        return ', '.join(customer.name for customer in self.contacts.all()[:3])
+    
+    display_customer_info.short_description = 'Customer'
+
+    def display_purchased_product(self):
+        return ', '.join(product.product.name for product in self.products.all()[:3])
+
+    display_purchased_product.short_description = 'Product'
 
 class PurchasedProduct(models.Model):
     purchase = models.ForeignKey(
@@ -102,10 +111,11 @@ class PurchasedProduct(models.Model):
         return float(self.product.price)   
 
     def sale_value(self):
-        if Sale.objects.filter(products=self.product):
-            return Sale.objects.get(products=self.product).value
-        else:
-            return 0
+        try:
+            product = ProductToSale.objects.get(product=self.product).sale.value
+        except ProductToSale.DoesNotExist:
+            product = 0
+        return product
 
     def total(self):
         sale = self.count * self.price() * (self.sale_value() / 100)
@@ -238,3 +248,5 @@ class SaleSummary(PurchasedProduct):
         proxy = True
         verbose_name = 'Sale Summary'
         verbose_name_plural = 'Sales Summary'
+
+
