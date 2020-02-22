@@ -37,9 +37,9 @@ class ProductDateView(generics.ListAPIView):
     serializer_class = ProductSerializer
 
 
-class ProductPriceView(generics.ListAPIView):
-    queryset = Price.objects.all()
-    serializer_class = PriceSerializer
+# class ProductPriceView(generics.ListAPIView):
+#     queryset = Price.objects.all()
+#     serializer_class = PriceSerializer
 
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):

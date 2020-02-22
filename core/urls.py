@@ -40,7 +40,7 @@ urlpatterns = [
     path('brand/', views.BrandView.as_view(), name='brand'),
     path('category/', views.CategoryView.as_view(), name='category'),
     path('product/', views.ProductView.as_view(), name='product'),
-    path('product/price/', views.ProductPriceView.as_view()),
+    # path('product/price/', views.ProductPriceView.as_view()),
     path('product/hits/', views.ProductHitView.as_view(), name='hits'),
     path('product/date/', views.ProductDateView.as_view()),
     path('product/recommended/',

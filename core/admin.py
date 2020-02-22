@@ -17,10 +17,9 @@ def get_next_in_date_hierarchy(request, date_hierarchy):
 
 class ProductAdmin(admin.ModelAdmin):
     list_filter = ('category', 'brand')
-    list_display = ('name', 'description',
-                    'image', 'brand')
+    list_display = ('name', 'price', 'brand')
     fieldsets = [
-        (None, {'fields': (('name', 'description'), 'image', 'category', 'brand')})
+        (None, {'fields': ('name', 'price', 'category', 'brand')})
     ]
 
 
@@ -112,7 +111,7 @@ admin.site.register(Session, SessionAdmin)
 admin.site.register(Slider)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand)
-admin.site.register(Price)
+# admin.site.register(Price)
 admin.site.register(CustomerInfo, CustomerInfoAdmin)
 admin.site.register(RecommendedProduct)
 admin.site.register(Sale, SaleAdmin)

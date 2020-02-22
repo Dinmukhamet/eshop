@@ -38,14 +38,14 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'description', 'image',
-                  'brand', 'category', 'current_price', 'created_at',
+                  'brand', 'category', 'price', 'created_at',
                   'total_purchase']
 
-class PriceSerializer(serializers.ModelSerializer):
+# class PriceSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Price
-        fields = ['id', 'product', 'price', 'created_at', 'date_to']
+#     class Meta:
+#         model = Price
+#         fields = ['id', 'product', 'price', 'created_at', 'date_to']
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
