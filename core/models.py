@@ -218,11 +218,15 @@ class ProductToSale(models.Model):
 
     class Meta:
         ordering = ['product']
+    
+    def old_price(self):
+        return self.product.price
 
     def new_price(self):
-        old_price = self.product.price
+        old_price = old_price()
         sale_value = self.sale.value
-        return old_price * sale_value / 100
+        return old_price - (old_price * sale_value / 100)
+    
 
 
 class SaleSummary(PurchasedProduct):
