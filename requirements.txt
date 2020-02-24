@@ -1,6 +1,5 @@
 aiohttp==3.5.4
 aniso8601==7.0.0
-apturl==0.5.2
 asgiref==3.2.3
 asn1crypto==0.24.0
 astral==1.10.1
