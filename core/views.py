@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, status
+from rest_framework.views import APIView, Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Max
 # from django.views.decorators.csrf import csrf_exempt
@@ -60,7 +61,22 @@ class PurchasedProductView(generics.ListCreateAPIView):
 class PurchaseView(generics.ListCreateAPIView):
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
+    
+# class PurchaseView(APIView):
+    
+#     def get(self, request, format=None):
+#         purchase = Purchase.objects.all()
+#         purchase_serializer = PurchaseSerializer(purchase, many=True)
+#         return Response(purchase_serializer.data)
 
+#     def post(self, request, format=None):
+#         data = request.data['products']
+#         if data is not None:
+#             serializer = PurchaseSerializer(data=request.data)
+#             if serializer.is_valid():
+#                 serializer.save()
+#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class PurchaseDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Purchase.objects.all()

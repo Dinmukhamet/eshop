@@ -2,18 +2,21 @@ from django.contrib import admin
 from django.db.models import Count, Sum, DateTimeField, Min, Max
 from django.db.models.functions import Trunc
 from django.contrib.sessions.models import Session
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django import forms
 from .models import *
 
 
 # Register your models here.
 def get_next_in_date_hierarchy(request, date_hierarchy):
-        if date_hierarchy + '__day' in request.GET:
-            return 'hour'
-        if date_hierarchy + '__month' in request.GET:
-            return 'day'
-        if date_hierarchy + '__year' in request.GET:
-            return 'week'
-        return 'month'
+    if date_hierarchy + '__day' in request.GET:
+        return 'hour'
+    if date_hierarchy + '__month' in request.GET:
+        return 'day'
+    if date_hierarchy + '__year' in request.GET:
+        return 'week'
+    return 'month'
+
 
 class ProductAdmin(admin.ModelAdmin):
     list_filter = ('category', 'brand')
@@ -59,7 +62,8 @@ class SaleSummaryAdmin(admin.ModelAdmin):
 
         response.context_data['period'] = period
 
-        summary_over_time = qs.annotate(period=Trunc('created_at', period, output_field=DateTimeField())).values('period').annotate(total=Sum('product__price')).order_by('period')
+        summary_over_time = qs.annotate(period=Trunc('created_at', period, output_field=DateTimeField(
+        ))).values('period').annotate(total=Sum('product__price')).order_by('period')
 
         summary_range = summary_over_time.aggregate(
             low=Min('total'), high=Max('total'))
@@ -68,8 +72,8 @@ class SaleSummaryAdmin(admin.ModelAdmin):
         low = summary_range.get('low', 0)
 
         response.context_data['summary_over_time'] = [{
-            'period': x['period'], 
-            'total': x['total'] or 0, 
+            'period': x['period'],
+            'total': x['total'] or 0,
             'pct': ((x['total'] or 0) - low) / (high - low) * 100
             if high > low else 0,
         } for x in summary_over_time]
@@ -106,9 +110,12 @@ class SessionAdmin(admin.ModelAdmin):
         return obj.get_decoded()
     list_display = ['session_key', '_session_data', 'expire_date']
 
-class PurchaseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'display_customer_info', 'display_purchased_product')
 
+class PurchaseAdmin(admin.ModelAdmin):
+    list_display = ('id', 'display_customer_info', 'display_purchased_product', 'total_sum')
+    
+# class RecommendedProductAdmin(admin.ModelAdmin):
+#     change_list_template = 'admin/recommended_product.html'
 
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Slider)

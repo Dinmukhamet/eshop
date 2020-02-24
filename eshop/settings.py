@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'drf_yasg',
     'jet_django',
+    'smart_selects',
     # my app
     'core',
 ]

@@ -18,6 +18,7 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 
 urlpatterns = [
+    path('chaining/', include('smart_selects.urls')),
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')), 
     path('jet_api/', include('jet_django.urls')),

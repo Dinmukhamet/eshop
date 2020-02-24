@@ -30,7 +30,8 @@ class PurchasedProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PurchasedProduct
-        fields = ['id', 'product', 'name', 'price', 'count', 'sale_value', 'total', 'created_at']
+        fields = ['id', 'product', 'name', 'price',
+                  'count', 'sale_value', 'total', 'created_at']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -54,11 +55,12 @@ class PurchaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Purchase
-        fields = ['id', 'contacts', 'products', 'total_sum',]
+        fields = ['id', 'contacts', 'products', 'total_sum', ]
 
     def create(self, validated_data):
         contacts_data = validated_data.pop('contacts')
         products_data = validated_data.pop('products')
+        # if products_data is not None:
         purchase = Purchase.objects.create(**validated_data)
         for products in products_data:
             product = PurchasedProduct.objects.get_or_create(
@@ -100,18 +102,37 @@ class SliderSerializer(serializers.ModelSerializer):
         fields = ['id', 'image', 'product']
 
 
+# class ProductToRecommendedProductSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = ProductToRecommendedProduct
+#         fields = ['id', 'recommended_product', 'product']
+
+
 class RecommendedProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RecommendedProduct
-        fields = ['id', 'date_from', 'date_to', 'products']
+        fields = ['id', 'date_from', 'date_to', 'category', 'product']
+
+    # def create(self, validated_data):
+    #     products_data = validated_data.pop('products')
+    #     recommended_product = RecommendedProduct.objects.create(
+    #         **validated_data)
+    #     for products in products_data:
+    #         product = ProductToRecommendedProduct.objects.create(
+    #             recommended_product=recommended_product, **products)
+    #     recommended_product.save()
+    #     return recommended_product
+
 
 class ProductToSaleSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = ProductToSale
         fields = ['sale', 'product', 'new_price', 'old_price']
-    
+
+
 class SaleSerializer(serializers.ModelSerializer):
     products = ProductToSaleSerializer(many=True)
 

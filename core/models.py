@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Sum
 from django.core.validators import MaxValueValidator, MinValueValidator
+from smart_selects.db_fields import ChainedManyToManyField
 # from annoying.fields import AutoOneToOneField
 # Create your models here.
 
@@ -42,7 +43,8 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.URLField(max_length=254, default='https://imgur.com/bY5YJhB')
+    image = models.URLField(
+        max_length=254, default='https://imgur.com/bY5YJhB')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     category = models.ManyToManyField(Category)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -81,13 +83,14 @@ class Purchase(models.Model):
 
     def display_customer_info(self):
         return ', '.join(customer.name for customer in self.contacts.all()[:3])
-    
+
     display_customer_info.short_description = 'Customer'
 
     def display_purchased_product(self):
         return ', '.join(product.product.name for product in self.products.all()[:3])
 
-    display_purchased_product.short_description = 'Product'
+    display_purchased_product.short_description = 'Products'
+
 
 class PurchasedProduct(models.Model):
     purchase = models.ForeignKey(
@@ -108,11 +111,12 @@ class PurchasedProduct(models.Model):
         return self.product.name
 
     def price(self):
-        return float(self.product.price)   
+        return float(self.product.price)
 
     def sale_value(self):
         try:
-            product = ProductToSale.objects.get(product=self.product).sale.value
+            product = ProductToSale.objects.get(
+                product=self.product).sale.value
         except ProductToSale.DoesNotExist:
             product = 0
         return product
@@ -186,7 +190,8 @@ class CommentRating(models.Model):
 
 
 class Slider(models.Model):
-    image = models.URLField(max_length=254, default='https://imgur.com/ bY5YJhB')
+    image = models.URLField(
+        max_length=254, default='https://imgur.com/ bY5YJhB')
     product = models.ForeignKey(
         Product, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -203,13 +208,27 @@ class Slider(models.Model):
 class RecommendedProduct(models.Model):
     date_from = models.DateTimeField(auto_now_add=True)
     date_to = models.DateTimeField(null=True, blank=True)
-    products = models.ManyToManyField(Product)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=False)
+    product = ChainedManyToManyField(
+        Product, 
+        chained_field="category",
+        chained_model_field="category",
+    )
 
     class Meta:
         ordering = ['date_from']
 
     def __str__(self):
         return 'Recommended Product object #{}'.format(self.id)
+
+
+# class ProductToRecommendedProduct(models.Model):
+#     recommended_product = models.ForeignKey(
+#         RecommendedProduct, related_name='products', on_delete=models.CASCADE, null=False)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
+
+#     class Meta:
+#         ordering = ['recommended_product']
 
 
 class Sale(models.Model):
@@ -222,16 +241,18 @@ class Sale(models.Model):
     class Meta:
         ordering = ['date_from']
 
+
 class ProductToSale(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
-    sale = models.ForeignKey(Sale, related_name='products', on_delete=models.CASCADE, null=False)
+    sale = models.ForeignKey(
+        Sale, related_name='products', on_delete=models.CASCADE, null=False)
 
     class Meta:
         ordering = ['product']
-    
+
     def product_name(self):
         return self.product.name
-    
+
     def old_price(self):
         return self.product.price
 
@@ -239,14 +260,11 @@ class ProductToSale(models.Model):
         price = self.old_price()
         sale_value = self.sale.value
         return price - (price * sale_value / 100)
-    
 
 
 class SaleSummary(PurchasedProduct):
-    
+
     class Meta:
         proxy = True
         verbose_name = 'Sale Summary'
         verbose_name_plural = 'Sales Summary'
-
-
