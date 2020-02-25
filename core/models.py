@@ -209,11 +209,11 @@ class RecommendedProduct(models.Model):
     date_from = models.DateTimeField(auto_now_add=True)
     date_to = models.DateTimeField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=False)
-    product = ChainedManyToManyField(
-        Product, 
-        chained_field="category",
-        chained_model_field="category",
-    )
+    # product = ChainedManyToManyField(
+    #     Product, 
+    #     chained_field="category",
+    #     chained_model_field="category",
+    # )
 
     class Meta:
         ordering = ['date_from']
