@@ -93,7 +93,7 @@ class SaleAdmin(admin.ModelAdmin):
     list_filter = ('date_from', 'date_to')
     list_display = ('date_from', 'date_to', 'value', 'display_products_to_sale')
     fieldsets = [
-        (None, {'fields': (('date_to', 'value', 'products'))})
+        (None, {'fields': (('date_to', 'value'))})
     ]
 
 class ProductToSaleAdmin(admin.ModelAdmin):
