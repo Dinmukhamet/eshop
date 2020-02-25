@@ -12,13 +12,13 @@ class ModelTest(TestCase):
         self.name = 'Test'
         self.brand = Brand.objects.create(name=self.name)
         self.category = Category.objects.create(name=self.name)
-        self.product = Product.objects.create(name=self.name, brand=self.brand)
-        self.price = Price.objects.create(product=self.product, price=250)
+        self.product = Product.objects.create(name=self.name, price=250, brand=self.brand)
+        # self.price = Price.objects.create(product=self.product, price=250)
         self.purchase = Purchase.objects.create()
         self.purchased_product = PurchasedProduct.objects.create(
             purchase=self.purchase, product=self.product, count=2)
         self.sale = Sale.objects.create(value=20)
-        self.sale.products.add(self.product)
+        # self.sale.products.add(self.product)
         self.contact = Contact.objects.create(name=self.name)
         self.rating = Rating.objects.create(product=self.product, rate=5)
         self.comment = Comment.objects.create(
@@ -40,12 +40,12 @@ class ModelTest(TestCase):
     def test_product_get_id(self):
         self.assertEqual(self.product.get_id(), self.product.id)
 
-    def test_product_current_price(self):
-        price = self.product.price.order_by('-created_at')[0].price
-        self.assertEqual(self.product.current_price, price)
+    # def test_product_current_price(self):
+    #     price = self.product.price.order_by('-created_at')[0].price
+    #     self.assertEqual(self.product.current_price, price)
 
     def test_price(self):
-        string = 'Product {}: {}'.format(self.product.name, self.price.price)
+        string = 'Product {}: {}'.format(self.product.name, self.price)
         self.assertEqual(self.price.__str__(), string)
 
     def test_purchase_total_sum(self):

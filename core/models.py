@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Sum
 from django.core.validators import MaxValueValidator, MinValueValidator
-from smart_selects.db_fields import ChainedManyToManyField
+from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 # from annoying.fields import AutoOneToOneField
 # Create your models here.
 
@@ -208,9 +208,10 @@ class Slider(models.Model):
 class RecommendedProduct(models.Model):
     date_from = models.DateTimeField(auto_now_add=True)
     date_to = models.DateTimeField(null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=False)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=False)
     product = ChainedManyToManyField(
-        Product, 
+        Product,
         chained_field="category",
         chained_model_field="category",
     )
@@ -220,6 +221,11 @@ class RecommendedProduct(models.Model):
 
     def __str__(self):
         return 'Recommended Product object #{}'.format(self.id)
+
+    def display_recommendedproduct(self):
+        return ', '.join(product.name for product in self.product.all()[:3])
+
+    display_recommendedproduct.short_description = 'Products'
 
 
 # class ProductToRecommendedProduct(models.Model):
@@ -241,11 +247,28 @@ class Sale(models.Model):
     class Meta:
         ordering = ['date_from']
 
+    def __str__(self):
+        return str(self.value) + '%'
+
+    def display_products_to_sale(self):
+        return ', '.join(product.product_name() for product in self.products.all()[:3])
+
+    display_products_to_sale.short_description = 'Products'
+
 
 class ProductToSale(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
     sale = models.ForeignKey(
         Sale, related_name='products', on_delete=models.CASCADE, null=False)
+
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=False)
+    product = ChainedForeignKey(
+        Product,
+        chained_field="category",
+        chained_model_field="category",
+        show_all=False,
+        auto_choose=True,
+        sort=True)
 
     class Meta:
         ordering = ['product']

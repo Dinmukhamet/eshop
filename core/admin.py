@@ -91,11 +91,13 @@ class CustomerInfoAdmin(admin.ModelAdmin):
 
 class SaleAdmin(admin.ModelAdmin):
     list_filter = ('date_from', 'date_to')
-    list_display = ('date_from', 'date_to', 'value')
+    list_display = ('date_from', 'date_to', 'value', 'display_products_to_sale')
     fieldsets = [
         (None, {'fields': (('date_to', 'value', 'products'))})
     ]
 
+class ProductToSaleAdmin(admin.ModelAdmin):
+    list_display = ('id', 'sale', 'product', 'old_price', 'new_price')
 
 class CategoryAdmin(admin.ModelAdmin):
     list_filter = ('parent',)
@@ -114,8 +116,8 @@ class SessionAdmin(admin.ModelAdmin):
 class PurchaseAdmin(admin.ModelAdmin):
     list_display = ('id', 'display_customer_info', 'display_purchased_product', 'total_sum')
     
-# class RecommendedProductAdmin(admin.ModelAdmin):
-#     change_list_template = 'admin/recommended_product.html'
+class RecommendedProductAdmin(admin.ModelAdmin):
+    list_display = ('id', 'category', 'display_recommendedproduct')
 
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Slider)
@@ -123,8 +125,8 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand)
 admin.site.register(Purchase, PurchaseAdmin)
 admin.site.register(CustomerInfo, CustomerInfoAdmin)
-admin.site.register(RecommendedProduct)
+admin.site.register(RecommendedProduct, RecommendedProductAdmin)
 admin.site.register(Sale, SaleAdmin)
-admin.site.register(ProductToSale)
+admin.site.register(ProductToSale, ProductToSaleAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(PurchasedProduct)

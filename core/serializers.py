@@ -130,7 +130,7 @@ class ProductToSaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductToSale
-        fields = ['sale', 'product', 'new_price', 'old_price']
+        fields = ['sale', 'product', 'old_price', 'new_price']
 
 
 class SaleSerializer(serializers.ModelSerializer):
