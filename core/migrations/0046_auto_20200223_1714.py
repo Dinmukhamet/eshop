@@ -14,13 +14,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='recommendedproduct',
             name='category',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='core.Category'),
+            field=models.ForeignKey(default=4, on_delete=django.db.models.deletion.CASCADE, to='core.Category'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='recommendedproduct',
             name='product',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='core.Product'),
+            field=models.ForeignKey(default=4, on_delete=django.db.models.deletion.CASCADE, to='core.Product'),
             preserve_default=False,
         ),
         migrations.DeleteModel(
