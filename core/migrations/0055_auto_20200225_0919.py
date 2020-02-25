@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='producttosale',
             name='product',
-            field=smart_selects.db_fields.ChainedForeignKey(auto_choose=True, chained_field='category', chained_model_field='category', default=19, on_delete=django.db.models.deletion.CASCADE, to='core.Product'),
+            field=smart_selects.db_fields.ChainedForeignKey(auto_choose=True, chained_field='category', chained_model_field='category', default=4, on_delete=django.db.models.deletion.CASCADE, to='core.Product'),
             preserve_default=False,
         ),
     ]
