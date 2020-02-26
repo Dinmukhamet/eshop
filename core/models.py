@@ -87,10 +87,17 @@ class Purchase(models.Model):
     display_customer_info.short_description = 'Customer'
 
     def display_purchased_product(self):
-        return ', '.join(product.product.name for product in self.products.all()[:3])
+        product_data = [product.product.name for product in self.products.all()]
+        product_count = [product.count for product in self.products.all()]
+        mydict = dict(zip(product_data, product_count))
+        return ', '.join(['%s: %s' % (key, value) for (key, value) in mydict.items()])
 
     display_purchased_product.short_description = 'Products'
 
+    def display_number_of_products(self):
+        return self.products.count()
+    
+    display_number_of_products.short_description = 'Total quantity'
 
 class PurchasedProduct(models.Model):
     purchase = models.ForeignKey(

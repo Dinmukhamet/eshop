@@ -114,7 +114,7 @@ class SessionAdmin(admin.ModelAdmin):
 
 
 class PurchaseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'display_customer_info', 'display_purchased_product', 'total_sum')
+    list_display = ('id', 'display_customer_info', 'display_purchased_product', 'display_number_of_products', 'total_sum')
     
 class RecommendedProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'category', 'display_recommendedproduct')
