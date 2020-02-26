@@ -91,6 +91,16 @@ class Purchase(models.Model):
     
     display_customer_email.short_description = 'Email'
 
+    def display_customer_phonenumber(self):
+        return ', '.join(customer.phone_number for customer in self.contacts.all()[:3])
+
+    display_customer_phonenumber.short_description = 'Phone number'
+
+    def display_customer_address(self):
+        return ', '.join(customer.address for customer in self.contacts.all()[:3])
+    
+    display_customer_address.short_description = 'Address'
+    
     def display_purchased_product(self):
         product_data = [product.product.name for product in self.products.all()]
         product_count = [product.count for product in self.products.all()]
@@ -99,10 +109,6 @@ class Purchase(models.Model):
 
     display_purchased_product.short_description = 'Products'
 
-    def display_number_of_products(self):
-        return self.products.count()
-    
-    display_number_of_products.short_description = 'Total quantity'
 
 class PurchasedProduct(models.Model):
     purchase = models.ForeignKey(
