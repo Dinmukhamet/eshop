@@ -86,6 +86,11 @@ class Purchase(models.Model):
 
     display_customer_info.short_description = 'Customer'
 
+    def display_customer_email(self):
+        return ', '.join(customer.email for customer in self.contacts.all()[:3])
+    
+    display_customer_email.short_description = 'Email'
+
     def display_purchased_product(self):
         product_data = [product.product.name for product in self.products.all()]
         product_count = [product.count for product in self.products.all()]
