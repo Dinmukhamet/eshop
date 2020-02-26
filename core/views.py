@@ -108,7 +108,7 @@ class RecommendedProductView(generics.ListAPIView):
     serializer_class = RecommendedProductSerializer
 
 
-class SaleView(generics.ListAPIView):
+class SaleView(generics.ListCreateAPIView):
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer
 
