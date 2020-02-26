@@ -32,13 +32,15 @@ schema_view = get_schema_view(
 # router.register(r'purchased_product', views.PurchasedProductView)
 # router.register(r'purchase', views.PurchaseView)
 # router.register(r'rating', views.RatingView)
-# router.register(r'comment', views.CommentView)
+# router.regixster(r'comment', views.CommentView)
 # router.register(r'comment_rating', views.CommentRatingView)
 
 urlpatterns = [
     # path('', include(router.urls)),
-    path('brand/', views.BrandView.as_view(), name='brand'),
-    path('category/', views.CategoryView.as_view(), name='category'),
+    path('brand/', views.BrandView.as_view(), name='brands'),
+    path('brand/<int:pk>', views.BrandDetailView.as_view(), name='brand'),
+    path('category/', views.CategoryView.as_view(), name='categories'),
+    path('category/<int:pk>/', views.CategoryDetailView.as_view(), name='category'),
     path('product/', views.ProductView.as_view(), name='product'),
     # path('product/price/', views.ProductPriceView.as_view()),
     path('product/hits/', views.ProductHitView.as_view(), name='hits'),

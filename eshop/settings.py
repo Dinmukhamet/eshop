@@ -153,7 +153,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'eshop/static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    # 'EXCEPTION_HANDLER': ['core.exceptions.custom_exception_handler'],
 }
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

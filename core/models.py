@@ -133,8 +133,7 @@ class PurchasedProduct(models.Model):
 
     def sale_value(self):
         try:
-            product = ProductToSale.objects.get(
-                product=self.product).sale.value
+            product = ProductToSale.objects.get(product=self.product).sale.value
         except ProductToSale.DoesNotExist:
             product = 0
         return product
@@ -301,8 +300,13 @@ class ProductToSale(models.Model):
         price = self.old_price()
         sale_value = self.sale.value
         return price - (price * sale_value / 100)
-
-
+    
+    def save(self, *args, **kwargs):
+        if ProductToSale.objects.filter(product=self.product).count() > 1:
+            raise Exception("This product already has a discount")
+        else:
+            super().save(*args, **kwargs) 
+        
 class SaleSummary(PurchasedProduct):
 
     class Meta:
