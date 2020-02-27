@@ -1,7 +1,10 @@
 from django.db import models
 from django.db.models import Sum
+from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
+
+
 # from annoying.fields import AutoOneToOneField
 # Create your models here.
 
@@ -88,7 +91,7 @@ class Purchase(models.Model):
 
     def display_customer_email(self):
         return ', '.join(customer.email for customer in self.contacts.all()[:3])
-    
+
     display_customer_email.short_description = 'Email'
 
     def display_customer_phonenumber(self):
@@ -98,11 +101,12 @@ class Purchase(models.Model):
 
     def display_customer_address(self):
         return ', '.join(customer.address for customer in self.contacts.all()[:3])
-    
+
     display_customer_address.short_description = 'Address'
-    
+
     def display_purchased_product(self):
-        product_data = [product.product.name for product in self.products.all()]
+        product_data = [
+            product.product.name for product in self.products.all()]
         product_count = [product.count for product in self.products.all()]
         mydict = dict(zip(product_data, product_count))
         return ', '.join(['%s: %s' % (key, value) for (key, value) in mydict.items()])
@@ -133,7 +137,8 @@ class PurchasedProduct(models.Model):
 
     def sale_value(self):
         try:
-            product = ProductToSale.objects.get(product=self.product).sale.value
+            product = ProductToSale.objects.get(
+                product=self.product).sale.value
         except ProductToSale.DoesNotExist:
             product = 0
         return product
@@ -300,16 +305,58 @@ class ProductToSale(models.Model):
         price = self.old_price()
         sale_value = self.sale.value
         return price - (price * sale_value / 100)
-    
+
     def save(self, *args, **kwargs):
         if ProductToSale.objects.filter(product=self.product).count() > 1:
             raise Exception("This product already has a discount")
         else:
-            super().save(*args, **kwargs) 
-        
+            super().save(*args, **kwargs)
+
+
 class SaleSummary(PurchasedProduct):
 
     class Meta:
         proxy = True
         verbose_name = 'Sale Summary'
         verbose_name_plural = 'Sales Summary'
+
+
+class SaleBundle(models.Model):
+    date_from = models.DateTimeField(null=True, blank=True)
+    date_to = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date_from']
+
+    def total_price(self):
+        return sum(product.product.price for product in self.products.all())
+
+    def new_price(self):
+        data = [product.product.price for product in self.products.all()]
+        data.remove(min(data))
+        return sum(data)
+    
+    def display_products(self):
+        return ', '.join(product.product.name for product in self.products.all())
+
+    display_products.short_description = 'Products'
+
+class ProductToSaleBundle(models.Model):
+    salebundle = models.ForeignKey(
+        SaleBundle, related_name='products', on_delete=models.CASCADE, null=False)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=False)
+    product = ChainedForeignKey(
+        Product,
+        chained_field="category",
+        chained_model_field="category",
+        show_all=False,
+        auto_choose=True,
+        sort=True)
+
+    class Meta:
+        ordering = ['salebundle']
+    
+    def price(self):
+        return self.product.price

@@ -130,7 +130,7 @@ class ProductToSaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductToSale
-        fields = ['category','product', 'old_price', 'new_price']
+        fields = ['category', 'product', 'old_price', 'new_price']
 
 
 class SaleSerializer(serializers.ModelSerializer):
@@ -147,3 +147,27 @@ class SaleSerializer(serializers.ModelSerializer):
             product = ProductToSale.objects.create(sale=sale, **products)
         sale.save()
         return sale
+
+
+class ProductToSaleBundleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProductToSaleBundle
+        fields = ['id', 'category', 'product', 'price']
+
+
+class SaleBundleSerializer(serializers.ModelSerializer):
+    products = ProductToSaleBundleSerializer(many=True)
+
+    class Meta:
+        model = SaleBundle
+        fields = ['id', 'date_from', 'date_to', 'created_at', 'products', 'total_price', 'new_price']
+
+    def create(self, validated_data):
+        products_data = validated_data.pop('products')
+        salebundle = SaleBundle.objects.create(**validated_data)
+        for products in products_data:
+            product = ProductToSaleBundle.objects.create(
+                salebundle=salebundle, **products)
+        salebundle.save()
+        return salebundle

@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'jet_django',
     'smart_selects',
+    'nested_admin',
     # my app
     'core',
 ]

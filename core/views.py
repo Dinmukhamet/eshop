@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, generics, status, permissions
 from rest_framework.views import APIView, Response
 from rest_framework.exceptions import APIException
 from django_filters.rest_framework import DjangoFilterBackend
@@ -115,7 +115,8 @@ class PurchaseView(APIView):
         products = request.data.get('products')
 
         if len(products) is 0:
-            raise APIException("Products can not be empty. Fill 'product' and 'count' fields.")
+            raise APIException(
+                "Products can not be empty. Fill 'product' and 'count' fields.")
 
         serializer = PurchaseSerializer(data=request.data)
         if serializer.is_valid():
@@ -163,7 +164,7 @@ class RecommendedProductView(generics.ListAPIView):
     serializer_class = RecommendedProductSerializer
 
 
-class SaleView(generics.ListAPIView):
+class SaleView(generics.ListCreateAPIView):
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer
 
@@ -171,3 +172,37 @@ class SaleView(generics.ListAPIView):
 class ProductToSaleView(generics.ListAPIView):
     queryset = ProductToSale.objects.all()
     serializer_class = ProductToSaleSerializer
+
+
+# class SaleBundleView(generics.ListCreateAPIView):
+#     queryset = SaleBundle.objects.all()
+#     serializer_class = SaleBundleSerializer
+
+
+class ProductToSaleBundleView(generics.ListAPIView):
+    queryset = ProductToSaleBundle.objects.all()
+    serializer_class = ProductToSaleBundleSerializer
+
+class SaleBundleView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def get(self, request, format=None):
+        salebundle = SaleBundle.objects.all()
+        serializer = SaleBundleSerializer(salebundle, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        products = request.data.get('products')
+
+        if len(products) is 0:
+            raise APIException(
+                "Products can not be empty. Fill 'product' and 'count' fields.")
+        elif len(products) is 1:
+            raise APIException(
+                "You can't add only one product to bundle.")
+
+        serializer = SaleBundleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

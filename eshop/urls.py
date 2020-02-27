@@ -18,6 +18,7 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 
 urlpatterns = [
+    path('nested_admin/', include('nested_admin.urls')),
     path('chaining/', include('smart_selects.urls')),
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')), 
