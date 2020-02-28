@@ -4,6 +4,7 @@ from rest_framework.views import APIView, Response
 from rest_framework.exceptions import APIException
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Max
+from django.http import JsonResponse
 
 # from django.views.decorators.csrf import csrf_exempt
 
@@ -32,7 +33,11 @@ class BrandDetailView(APIView):
         try:
             return Brand.objects.get(pk=pk)
         except Brand.DoesNotExist:
-            raise APIException('Brand with id {} does not exist'.format(pk))
+            response = {"Error": {"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                  "type": "Internal Server Error",
+                                  "message": 'Brand with id {} does not exist'.format(pk)}}
+            raise APIException(response)
+            # return JsonResponse({'status': 'false', 'message': 'Brand with id {} does not exist'.format(pk)}, status=500    )
 
     def get(self, request, pk, format=None):
         brand = self.get_object(pk)
@@ -51,7 +56,10 @@ class CategoryDetailView(APIView):
         try:
             return Category.objects.get(pk=pk)
         except Category.DoesNotExist:
-            raise APIException('Category with id {} does not exist'.format(pk))
+            response = {"Error": {"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                  "type": "Internal Server Error",
+                                  "message": 'Category with id {} does not exist'.format(pk)}}
+            raise APIException(response)
 
     def get(self, request, pk, format=None):
         category = self.get_object(pk)
@@ -63,7 +71,7 @@ class ProductView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['category']
+    filterset_fields = ['category', 'brand']
 
 
 class ProductHitView(generics.ListAPIView):
@@ -82,7 +90,10 @@ class ProductDetailView(APIView):
         try:
             return Product.objects.get(pk=pk)
         except Product.DoesNotExist:
-            raise APIException('Product with id {} does not exist'.format(pk))
+            response = {"Error": {"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                  "type": "Internal Server Error",
+                                  "message": 'Product with id {} does not exist'.format(pk)}}
+            raise APIException(response)
 
     def get(self, request, pk, format=None):
         product = self.get_object(pk)
@@ -115,8 +126,10 @@ class PurchaseView(APIView):
         products = request.data.get('products')
 
         if len(products) is 0:
-            raise APIException(
-                "Products can not be empty. Fill 'product' and 'count' fields.")
+            response = {"Error": {"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                  "type": "Internal Server Error",
+                                  "message": "Products can not be empty. Fill 'product' and 'count' fields."}}
+            raise APIException(response)
 
         serializer = PurchaseSerializer(data=request.data)
         if serializer.is_valid():
@@ -131,7 +144,10 @@ class PurchaseDetailView(APIView):
         try:
             return Purchase.objects.get(pk=pk)
         except Purchase.DoesNotExist:
-            raise APIException('Purchase with id {} does not exist'.format(pk))
+            response = {"Error": {"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                  "type": "Internal Server Error",
+                                  "message": "Purchase with id {} does not exist".format(pk)}}
+            raise APIException(response)
 
     def get(self, request, pk, format=None):
         product = self.get_object(pk)
@@ -183,23 +199,34 @@ class ProductToSaleBundleView(generics.ListAPIView):
     queryset = ProductToSaleBundle.objects.all()
     serializer_class = ProductToSaleBundleSerializer
 
+
 class SaleBundleView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
     def get(self, request, format=None):
-        salebundle = SaleBundle.objects.all()
-        serializer = SaleBundleSerializer(salebundle, many=True)
-        return Response(serializer.data)
-
+        # if user.is_admin:
+            salebundle = SaleBundle.objects.all()
+            serializer = SaleBundleSerializer(salebundle, many=True)
+            return Response(serializer.data)
+        # else:
+        #     response = {"Error": {"status": status.HTTP_403_FORBIDDEN,
+        #                           "forbidden": "You don’t have permission to access [directory] on this server",
+        #                           "message": "Authentication credentials were not provided."}}
+        #     raise APIException(response)
     def post(self, request, format=None):
         products = request.data.get('products')
 
         if len(products) is 0:
-            raise APIException(
-                "Products can not be empty. Fill 'product' and 'count' fields.")
+            response = {"Error": {"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                  "type": "Internal Server Error",
+                                  "message": "Products can not be empty. Fill 'category' and 'product'fields."}}
+            raise APIException(response)
+
         elif len(products) is 1:
-            raise APIException(
-                "You can't add only one product to bundle.")
+            response = {"Error": {"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                  "type": "Internal Server Error",
+                                  "message": "You can't add only one product to bundle."}}
+            raise APIException(response)
 
         serializer = SaleBundleSerializer(data=request.data)
         if serializer.is_valid():
