@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, generics, status, permissions
 from rest_framework.views import APIView, Response
 from rest_framework.exceptions import APIException
+from django_filters import rest_framework as filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Max
 from django.http import JsonResponse
@@ -66,13 +67,19 @@ class CategoryDetailView(APIView):
         serializer = CategorySerializer(category)
         return Response(serializer.data)
 
+class ProductPriceFilter(filters.FilterSet):
+    min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
+    max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
+
+    class Meta:
+        model = Product
+        fields = ['category', 'brand', 'min_price', 'max_price']
 
 class ProductView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['category', 'brand']
-
+    filterset_class = ProductPriceFilter
 
 class ProductHitView(generics.ListAPIView):
     queryset = Product.objects.order_by('-total_purchase')
