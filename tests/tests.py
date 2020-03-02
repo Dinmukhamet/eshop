@@ -1,9 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.exceptions import APIException
 from rest_framework.test import APITestCase, APIRequestFactory
 from core.models import *
 from .factories import *
+from core.views import *
 # Create your tests here.
 
 
@@ -26,9 +29,14 @@ class ModelTest(TestCase):
         self.comment_rating = CommentRating.objects.create(
             comment=self.comment, rate=5)
         self.slider = Slider.objects.create()
-        self.recommended_product = RecommendedProduct.objects.create(category=self.category)
+        self.recommended_product = RecommendedProduct.objects.create(
+            category=self.category)
         self.sale = Sale.objects.create()
-        self.product_to_sale = ProductToSale.objects.create(sale=self.sale, category=self.category, product=self.product)
+        self.product_to_sale = ProductToSale.objects.create(
+            sale=self.sale, category=self.category, product=self.product)
+        self.salebundle = SaleBundle.objects.create()
+        self.producttosalebundle = ProductToSaleBundle.objects.create(
+            salebundle=self.salebundle, category=self.category, product=self.product)
 
     def test_brand(self):
         self.assertEqual(self.brand.__str__(), self.brand.name)
@@ -40,27 +48,38 @@ class ModelTest(TestCase):
         self.assertEqual(self.product.__str__(), self.product.name)
 
     def test_display_customer_info(self):
-        customer_name = [customer.name for customer in self.purchase.contacts.all()]
-        self.assertEqual(self.purchase.display_customer_info(), ', '.join(customer_name)[:3])
-    
+        customer_name = [
+            customer.name for customer in self.purchase.contacts.all()]
+        self.assertEqual(self.purchase.display_customer_info(),
+                         ', '.join(customer_name)[:3])
+
     def test_display_customer_phonenumber(self):
-        customer_phonenumber = [customer.phone_number for customer in self.purchase.contacts.all()]
-        self.assertEqual(self.purchase.display_customer_phonenumber(), ', '.join(customer_phonenumber)[:3])
-    
+        customer_phonenumber = [
+            customer.phone_number for customer in self.purchase.contacts.all()]
+        self.assertEqual(self.purchase.display_customer_phonenumber(
+        ), ', '.join(customer_phonenumber)[:3])
+
     def test_display_customer_email(self):
-        customer_email = [customer.email for customer in self.purchase.contacts.all()]
-        self.assertEqual(self.purchase.display_customer_email(), ', '.join(customer_email)[:3])
-   
+        customer_email = [
+            customer.email for customer in self.purchase.contacts.all()]
+        self.assertEqual(self.purchase.display_customer_email(),
+                         ', '.join(customer_email)[:3])
+
     def test_display_customer_address(self):
-        customer_address = [customer.address for customer in self.purchase.contacts.all()]
-        self.assertEqual(self.purchase.display_customer_address(), ', '.join(customer_address)[:3])
-    
+        customer_address = [
+            customer.address for customer in self.purchase.contacts.all()]
+        self.assertEqual(self.purchase.display_customer_address(),
+                         ', '.join(customer_address)[:3])
+
     def test_display_purchased_product(self):
-        product_data = [product.product.name for product in self.purchase.products.all()]
-        product_count = [product.count for product in self.purchase.products.all()]
+        product_data = [
+            product.product.name for product in self.purchase.products.all()]
+        product_count = [
+            product.count for product in self.purchase.products.all()]
         mydict = dict(zip(product_data, product_count))
-        self.assertEqual(self.purchase.display_purchased_product(), ', '.join(['%s: %s' % (key, value) for (key, value) in mydict.items()]))
-    
+        self.assertEqual(self.purchase.display_purchased_product(), ', '.join(
+            ['%s: %s' % (key, value) for (key, value) in mydict.items()]))
+
     # def test_product_get_id(self):
     #     self.assertEqual(self.product.get_id(), self.product.id)
 
@@ -78,7 +97,8 @@ class ModelTest(TestCase):
     #     self.assertEqual(self.purchase.total_sum(), total_sum)
 
     def test_purchased_product(self):
-        string = 'Purchase #{}: {} - {}'.format(self.purchase.id, self.product.name, self.purchased_product.count)
+        string = 'Purchase #{}: {} - {}'.format(
+            self.purchase.id, self.product.name, self.purchased_product.count)
         self.assertEqual(self.purchased_product.__str__(), string)
 
     # def test_purchased_product_name(self):
@@ -113,21 +133,22 @@ class ModelTest(TestCase):
 
     def test_recommended_product(self):
         self.assertEqual('Recommended Product object #{}'.format(
-        self.recommended_product.id), self.recommended_product.__str__())
-    
+            self.recommended_product.id), self.recommended_product.__str__())
+
     def test_display_recommendedproduct(self):
         self.assertEqual(self.recommended_product.display_recommendedproduct(),
-        ', '.join(product.name for product in self.recommended_product.product.all()[:3]))
+                         ', '.join(product.name for product in self.recommended_product.product.all()[:3]))
 
     def test_sale(self):
         self.assertEqual(self.sale.__str__(), str(self.sale.value) + '%')
 
     def test_display_products_to_sale(self):
-        self.assertEqual(self.sale.display_products_to_sale(), ', '.join(product.product_name() for product in self.sale.products.all()[:3]))
-
+        self.assertEqual(self.sale.display_products_to_sale(), ', '.join(
+            product.product_name() for product in self.sale.products.all()[:3]))
 
     def test_producttosale_product_name(self):
-        self.assertEqual(self.product.name , self.product_to_sale.product_name())
+        self.assertEqual(self.product.name,
+                         self.product_to_sale.product_name())
 
     def test_producttosale_old_price(self):
         self.assertEqual(self.product.price, self.product_to_sale.old_price())
@@ -137,15 +158,47 @@ class ModelTest(TestCase):
         new_price = price - (price * self.sale.value / 100)
         self.assertEqual(self.product_to_sale.new_price(), new_price)
 
+    def test_producttosale_raise_exception(self):
+        product1 = ProductToSale(
+            sale=self.sale, category=self.category, product=self.product)
+        product1.save()
+        product2 = ProductToSale(
+            sale=self.sale, category=self.category, product=self.product)
+        # self.assertTrue('This product already has a discount' in str(context.exception))
+        self.assertRaises(Exception, product2.save)
+
+    def test_salebundle_total_price(self):
+        self.assertEqual(self.salebundle.total_price(), sum(
+            product.product.price for product in self.salebundle.products.all()))
+
+    def test_salebundle_new_price(self):
+        data = [product.product.price for product in self.salebundle.products.all()]
+        data.remove(min(data))
+        self.assertEqual(self.salebundle.new_price(), sum(data))
+
+    def test_salebundle_display_products(self):
+        self.assertEqual(self.salebundle.display_products(),
+                         ', '.join(product.product.name for product in self.salebundle.products.all()))
+
+    def test_producttosalebundle_price(self):
+        self.assertEqual(self.producttosalebundle.price(),
+                         self.producttosalebundle.product.price)
+
+
 class SerializerTest(APITestCase):
     def setUp(self):
         self.product = ProductFactory()
         self.category = CategoryFactory()
+        self.user = get_user_model().objects.create_superuser(
+            'test',
+            'test@test.com',
+            'test',
+        )
 
     def test_purchase_create(self):
         # Price.objects.create(product=product, price=150)
 
-        url = reverse('purchase')
+        url = reverse('purchases')
         data = {
             "contacts": [
                 {
@@ -178,3 +231,148 @@ class SerializerTest(APITestCase):
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_salebundle_create(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('salebundles')
+        data = {
+            "products": [
+                {
+                    "category": self.category.id,
+                    "product": self.product.id
+                },
+                {
+                    "category": self.category.id,
+                    "product": self.product.id
+                }
+            ]
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class ViewsTest(APITestCase):
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = get_user_model().objects.create_superuser(
+            'test',
+            'test@test.com',
+            'test',
+        )
+        self.brand = BrandFactory()
+        self.product = ProductFactory()
+        self.purchase = Purchase.objects.create()
+
+    def test_brand_view_get(self):
+        url = reverse('brands')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_branddetail_get_object(self):
+        response = self.client.get('/brand/100/')
+        self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                         response.status_code)
+
+    def test_categorydetail_get_object(self):
+        response = self.client.get('/category/100/')
+        self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                         response.status_code)
+
+    def test_productdetail_get_object(self):
+        response = self.client.get('/product/100/')
+        self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                         response.status_code)
+
+    def test_purchase_get(self):
+        url = reverse('purchases')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_purchasedetail_get_object(self):
+        response = self.client.get('/purchase/100/')
+        self.assertEqual(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                         response.status_code)
+
+    def test_purchase_post_exceptions(self):
+        url = reverse('purchases')
+        data = {
+            "contacts": [
+                {
+                    "name": "Dimash",
+                    "email": "d.igisinov@gmail.com",
+                    "phone_number": "+996552206521",
+                    "address": "test"
+                }
+            ],
+            "products": [
+            ]
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code,
+                         status.HTTP_500_INTERNAL_SERVER_ERROR)
+        data = {
+            "products": [
+                {
+                    "category": self.category.id,
+                    "product": self.product.id
+                }
+            ]
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_salebundle_post_exception(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('salebundles')
+        data = {
+            "products": []
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code,
+                         status.HTTP_500_INTERNAL_SERVER_ERROR)
+        data = {
+            "products": [
+                {
+                    "category": self.category.id,
+                    "product": self.product.id
+                }
+            ]
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code,
+                         status.HTTP_500_INTERNAL_SERVER_ERROR)
+        data = {
+            "products":
+                {
+                    "category": self.category.id,
+                    "product": self.product.id
+                }
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_salebundle_get(self):
+        self.client.force_authenticate(user=self.user)
+        url = reverse('salebundles')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_branddetail_get(self):
+        url = reverse("brand", kwargs={'pk': self.brand.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_categorydetail_get(self):
+        url = reverse("category", kwargs={'pk': self.category.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_productdetail_get(self):
+        url = reverse("product", kwargs={'pk': self.product.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_purchasedetail_get(self):
+        url = reverse("purchase", kwargs={'pk': self.purchase.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
