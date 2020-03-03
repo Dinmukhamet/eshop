@@ -9,6 +9,8 @@ from .models import *
 import nested_admin
 
 # Register your models here.
+
+
 def get_next_in_date_hierarchy(request, date_hierarchy):
     if date_hierarchy + '__day' in request.GET:
         return 'hour'
@@ -21,9 +23,11 @@ def get_next_in_date_hierarchy(request, date_hierarchy):
 
 class ProductAdmin(admin.ModelAdmin):
     list_filter = ('category', 'brand')
-    list_display = ('name', 'price', 'brand')
+    list_display = ('name', 'price', 'brand',
+                    'created_at', 'total_purchase')
     fieldsets = [
-        (None, {'fields': ('name', 'price', 'category', 'brand')})
+        (None, {'fields': ('name', 'price', 'category',
+                           'brand', 'created_at', 'total_purchase')})
     ]
 
 
@@ -126,13 +130,17 @@ class PurchaseAdmin(admin.ModelAdmin):
 class RecommendedProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'category', 'display_recommendedproduct')
 
+
 class ProductSectionInline(nested_admin.NestedStackedInline):
     model = ProductToSaleBundle
     # sortable_field_name = "product"
 
+
 class SaleBundleAdmin(nested_admin.NestedModelAdmin):
     inlines = [ProductSectionInline]
-    list_display = ('id', 'date_from', 'date_to', 'created_at', 'display_products', 'total_price', 'new_price')
+    list_display = ('id', 'date_from', 'date_to', 'created_at',
+                    'display_products', 'total_price', 'new_price')
+
 
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Slider)
