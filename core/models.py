@@ -59,6 +59,9 @@ class Product(models.Model):
     def __str__(self):
         return '{}'.format(self.name)
 
+    def quantity(self):
+        return Product.objects.all().count()
+
     # @property
     # def current_price(self):
     #     if self.price.all():

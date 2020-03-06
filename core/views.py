@@ -220,6 +220,7 @@ class SaleBundleView(APIView):
         #                           "forbidden": "You don’t have permission to access [directory] on this server",
         #                           "message": "Authentication credentials were not provided."}}
         #     raise APIException(response)
+    
     def post(self, request, format=None):
         products = request.data.get('products')
 
