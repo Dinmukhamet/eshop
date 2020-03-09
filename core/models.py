@@ -216,7 +216,7 @@ class CommentRating(models.Model):
 
 class Slider(models.Model):
     image = models.URLField(
-        max_length=254, default='https://imgur.com/ bY5YJhB')
+        max_length=254, default='https://imgur.com/bY5YJhB')
     product = models.ForeignKey(
         Product, on_delete=models.SET_NULL, null=True, blank=True)
 
