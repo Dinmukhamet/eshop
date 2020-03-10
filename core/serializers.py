@@ -161,7 +161,7 @@ class SaleBundleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SaleBundle
-        fields = ['id', 'date_from', 'date_to', 'created_at', 'products', 'total_price', 'new_price']
+        fields = ['id', 'date_from', 'date_to', 'created_at', 'products', 'total_price', 'new_price', 'description']
 
     def create(self, validated_data):
         products_data = validated_data.pop('products')
