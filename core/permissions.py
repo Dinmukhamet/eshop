@@ -5,7 +5,10 @@ class IsPostOrIsAuthenticated(permissions.BasePermission):
     def has_permission(self, request, view):
         # allow all POST requests
         if request.method == 'POST':
-            return False
+            if request.user.is_superuser:
+                return True
+            else:
+                return False
         
         if request.method == 'GET':
             return True
