@@ -328,6 +328,7 @@ class SaleBundle(models.Model):
     date_from = models.DateTimeField(null=True, blank=True)
     date_to = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    description = models.TextField()
 
     class Meta:
         ordering = ['date_from']

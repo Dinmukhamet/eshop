@@ -6,7 +6,7 @@ from django_filters import rest_framework as filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Max
 from django.http import JsonResponse
-
+from .permissions import *
 # from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
@@ -208,7 +208,7 @@ class ProductToSaleBundleView(generics.ListAPIView):
 
 
 class SaleBundleView(APIView):
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsPostOrIsAuthenticated]
 
     def get(self, request, format=None):
         # if user.is_admin:
