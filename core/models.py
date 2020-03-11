@@ -229,9 +229,6 @@ class CommentRating(models.Model):
         return 'Comment to product "{}" #{} - {}'.format(product, self.comment, self.rate)
 
 
-
-
-
 class RecommendedProduct(models.Model):
     date_from = models.DateTimeField(auto_now_add=True)
     date_to = models.DateTimeField(null=True, blank=True)
@@ -353,7 +350,7 @@ class ProductToSaleBundle(models.Model):
     salebundle = models.ForeignKey(
         SaleBundle, related_name='products', on_delete=models.CASCADE, null=False)
     # subcategory = models.ForeignKey(
-        # Subcategory, on_delete=models.CASCADE, null=False)
+    # Subcategory, on_delete=models.CASCADE, null=False)
     product = ChainedForeignKey(
         Product,
         chained_field="subcategory",
@@ -367,6 +364,7 @@ class ProductToSaleBundle(models.Model):
 
     def price(self):
         return self.product.price
+
 
 class Slider(models.Model):
     image = models.URLField(
