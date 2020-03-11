@@ -30,7 +30,7 @@ class ProductAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ('name', 'price', 
         # 'subcategory',
-                           'brand', 'created_at', 'total_purchase')})
+                           'brand', 'total_purchase')})
     ]
 
 
