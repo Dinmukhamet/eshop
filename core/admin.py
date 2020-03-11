@@ -126,7 +126,9 @@ class PurchaseAdmin(admin.ModelAdmin):
 
 
 class RecommendedProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'subcategory', 'display_recommendedproduct')
+    list_display = ('id', 
+    # 'subcategory', 
+    'display_recommendedproduct')
 
 
 class ProductSectionInline(nested_admin.NestedStackedInline):
