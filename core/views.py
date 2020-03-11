@@ -79,7 +79,7 @@ class ProductPriceFilter(filters.FilterSet):
 
     class Meta:
         model = Product
-        fields = ['subcategory', 'brand', 'min_price', 'max_price']
+        fields = ['brand', 'min_price', 'max_price']
 
 
 class ProductView(generics.ListAPIView):
