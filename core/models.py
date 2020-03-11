@@ -349,8 +349,8 @@ class SaleBundle(models.Model):
 class ProductToSaleBundle(models.Model):
     salebundle = models.ForeignKey(
         SaleBundle, related_name='products', on_delete=models.CASCADE, null=False)
-    # subcategory = models.ForeignKey(
-    # Subcategory, on_delete=models.CASCADE, null=False)
+    subcategory = models.ForeignKey(
+        Subcategory, on_delete=models.CASCADE, null=False)
     product = ChainedForeignKey(
         Product,
         chained_field="subcategory",
