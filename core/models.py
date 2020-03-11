@@ -61,8 +61,8 @@ class Product(models.Model):
     image = models.URLField(
         max_length=254, default='https://imgur.com/bY5YJhB')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
-    subcategory = models.ForeignKey(
-        Subcategory, on_delete=models.CASCADE, null=False)
+    # subcategory = models.ForeignKey(
+        # Subcategory, on_delete=models.CASCADE, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     total_purchase = models.PositiveIntegerField(default=0)
 

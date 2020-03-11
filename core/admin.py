@@ -22,11 +22,14 @@ def get_next_in_date_hierarchy(request, date_hierarchy):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_filter = ('subcategory', 'brand')
+    list_filter = (
+        # 'subcategory', 
+        'brand',)
     list_display = ('name', 'price', 'brand',
                     'created_at', 'total_purchase')
     fieldsets = [
-        (None, {'fields': ('name', 'price', 'subcategory',
+        (None, {'fields': ('name', 'price', 
+        # 'subcategory',
                            'brand', 'created_at', 'total_purchase')})
     ]
 
@@ -35,7 +38,8 @@ class ProductAdmin(admin.ModelAdmin):
 class SaleSummaryAdmin(admin.ModelAdmin):
     change_list_template = 'admin/sale_summary_change_list.html'
     list_filter = (
-        'product__subcategory',
+        'product',
+        # __subcategory',
     )
     date_hierarchy = 'created_at'
 
