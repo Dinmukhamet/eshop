@@ -61,8 +61,8 @@ class Product(models.Model):
     image = models.URLField(
         max_length=254, default='https://imgur.com/bY5YJhB')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
-    # subcategory = models.ForeignKey(
-        # Subcategory, on_delete=models.CASCADE, null=False)
+    subcategory = models.ForeignKey(
+        Subcategory, on_delete=models.CASCADE, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     total_purchase = models.PositiveIntegerField(default=0)
 
@@ -235,8 +235,8 @@ class CommentRating(models.Model):
 class RecommendedProduct(models.Model):
     date_from = models.DateTimeField(auto_now_add=True)
     date_to = models.DateTimeField(null=True, blank=True)
-    # subcategory = models.ForeignKey(
-        # Subcategory, on_delete=models.CASCADE, null=False)
+    subcategory = models.ForeignKey(
+        Subcategory, on_delete=models.CASCADE, null=False)
     product = ChainedManyToManyField(
         Product,
         chained_field="subcategory",
@@ -287,8 +287,8 @@ class ProductToSale(models.Model):
     sale = models.ForeignKey(
         Sale, related_name='products', on_delete=models.CASCADE, null=False)
 
-    # subcategory = models.ForeignKey(
-        # Subcategory, on_delete=models.CASCADE, null=False)
+    subcategory = models.ForeignKey(
+        Subcategory, on_delete=models.CASCADE, null=False)
     product = ChainedForeignKey(
         Product,
         chained_field="subcategory",
