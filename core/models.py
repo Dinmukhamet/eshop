@@ -32,8 +32,20 @@ class Brand(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey(
-        'self', on_delete=models.SET_NULL, blank=True, null=True)
+    # parent = models.ForeignKey(
+    # 'self', on_delete=models.SET_NULL, blank=True, null=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Subcategory(models.Model):
+    name = models.CharField(max_length=255)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=False)
 
     class Meta:
         ordering = ['name']
@@ -49,7 +61,8 @@ class Product(models.Model):
     image = models.URLField(
         max_length=254, default='https://imgur.com/bY5YJhB')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
-    category = models.ManyToManyField(Category)
+    subcategory = models.ForeignKey(
+        Subcategory, on_delete=models.CASCADE, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     total_purchase = models.PositiveIntegerField(default=0)
 
@@ -62,6 +75,8 @@ class Product(models.Model):
     def total_quantity(self):
         return Product.objects.all().count()
 
+    def category(self):
+        return self.subcategory.category.id
     # @property
     # def current_price(self):
     #     if self.price.all():
@@ -214,20 +229,7 @@ class CommentRating(models.Model):
         return 'Comment to product "{}" #{} - {}'.format(product, self.comment, self.rate)
 
 
-class Slider(models.Model):
-    image = models.URLField(
-        max_length=254, default='https://imgur.com/bY5YJhB')
-    product = models.ForeignKey(
-        Product, on_delete=models.SET_NULL, null=True, blank=True)
 
-    class Meta:
-        ordering = ['image']
-
-    def __str__(self):
-        if self.product:
-            product_name = self.product.name
-            return 'Images for product {}'.format(product_name)
-        return 'There is no product. Slider #{}'.format(self.id)
 
 
 class RecommendedProduct(models.Model):
@@ -340,11 +342,12 @@ class SaleBundle(models.Model):
         data = [product.product.price for product in self.products.all()]
         data.remove(min(data))
         return sum(data)
-    
+
     def display_products(self):
         return ', '.join(product.product.name for product in self.products.all())
 
     display_products.short_description = 'Products'
+
 
 class ProductToSaleBundle(models.Model):
     salebundle = models.ForeignKey(
@@ -361,6 +364,23 @@ class ProductToSaleBundle(models.Model):
 
     class Meta:
         ordering = ['salebundle']
-    
+
     def price(self):
         return self.product.price
+
+class Slider(models.Model):
+    image = models.URLField(
+        max_length=254, default='https://imgur.com/bY5YJhB')
+    product = models.ForeignKey(
+        Product, on_delete=models.SET_NULL, null=True, blank=True)
+    salebundle = models.ForeignKey(
+        SaleBundle, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ['image']
+
+    def __str__(self):
+        if self.product:
+            product_name = self.product.name
+            return 'Images for product {}'.format(product_name)
+        return 'There is no product. Slider #{}'.format(self.id)

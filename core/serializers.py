@@ -16,6 +16,12 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'parent']
 
 
+class SubcategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subcategory
+        fields = ['id', 'name', 'category', 'subcategory']
+
 # PurchasedProduct.objects.values('product').annotate(number_of_purchases = Sum('count')).order_by('-number_of_purchases')
 
 
@@ -99,7 +105,7 @@ class SliderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Slider
-        fields = ['id', 'image', 'product']
+        fields = ['id', 'image', 'product', 'salebundle']
 
 
 # class ProductToRecommendedProductSerializer(serializers.ModelSerializer):
@@ -133,6 +139,7 @@ class ProductToSaleSerializer(serializers.ModelSerializer):
         fields = ['category', 'product', 'old_price', 'new_price']
         depth = 1
 
+
 class SaleSerializer(serializers.ModelSerializer):
     products = ProductToSaleSerializer(many=True)
 
@@ -161,7 +168,8 @@ class SaleBundleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SaleBundle
-        fields = ['id', 'date_from', 'date_to', 'created_at', 'products', 'total_price', 'new_price', 'description']
+        fields = ['id', 'date_from', 'date_to', 'created_at',
+                  'products', 'total_price', 'new_price', 'description']
 
     def create(self, validated_data):
         products_data = validated_data.pop('products')

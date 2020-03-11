@@ -41,6 +41,7 @@ urlpatterns = [
     path('brand/<int:pk>/', views.BrandDetailView.as_view(), name='brand'),
     path('category/', views.CategoryView.as_view(), name='categories'),
     path('category/<int:pk>/', views.CategoryDetailView.as_view(), name='category'),
+    path('subcategory/', views.SubcategoryView.as_view(), name='subcategory'),
     path('product/', views.ProductView.as_view(), name='products'),
     # path('product/price/', views.ProductPriceView.as_view()),
     path('product/hits/', views.ProductHitView.as_view(), name='hits'),

@@ -51,6 +51,11 @@ class CategoryView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
 
+class SubcategoryView(generics.ListAPIView):
+    queryset = Subcategory.objects.all()
+    serializer_class = SubcategorySerializer
+
+
 class CategoryDetailView(APIView):
 
     def get_object(self, pk):
@@ -67,6 +72,7 @@ class CategoryDetailView(APIView):
         serializer = CategorySerializer(category)
         return Response(serializer.data)
 
+
 class ProductPriceFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
@@ -75,11 +81,13 @@ class ProductPriceFilter(filters.FilterSet):
         model = Product
         fields = ['category', 'brand', 'min_price', 'max_price']
 
+
 class ProductView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = ProductPriceFilter
+
 
 class ProductHitView(generics.ListAPIView):
     queryset = Product.objects.order_by('-total_purchase')
@@ -212,15 +220,15 @@ class SaleBundleView(APIView):
 
     def get(self, request, format=None):
         # if user.is_admin:
-            salebundle = SaleBundle.objects.all()
-            serializer = SaleBundleSerializer(salebundle, many=True)
-            return Response(serializer.data)
+        salebundle = SaleBundle.objects.all()
+        serializer = SaleBundleSerializer(salebundle, many=True)
+        return Response(serializer.data)
         # else:
         #     response = {"Error": {"status": status.HTTP_403_FORBIDDEN,
         #                           "forbidden": "You don’t have permission to access [directory] on this server",
         #                           "message": "Authentication credentials were not provided."}}
         #     raise APIException(response)
-    
+
     def post(self, request, format=None):
         products = request.data.get('products')
 
