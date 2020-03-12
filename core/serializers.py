@@ -179,3 +179,9 @@ class SaleBundleSerializer(serializers.ModelSerializer):
                 salebundle=salebundle, **products)
         salebundle.save()
         return salebundle
+
+class FooterMediaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FooterMedia
+        fields = ['id', 'name', 'media_type']

@@ -79,7 +79,7 @@ class ProductPriceFilter(filters.FilterSet):
 
     class Meta:
         model = Product
-        fields = ['brand', 'min_price', 'max_price']
+        fields = ['subcategory__category','subcategory', 'brand', 'min_price', 'max_price']
 
 
 class ProductView(generics.ListAPIView):
@@ -250,3 +250,7 @@ class SaleBundleView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class FooterMediaView(generics.ListAPIView):
+    queryset = FooterMedia.objects.all()
+    serializer_class = FooterMediaSerializer

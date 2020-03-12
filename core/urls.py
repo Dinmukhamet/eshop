@@ -62,6 +62,7 @@ urlpatterns = [
     path('comment/', views.CommentView.as_view(), name='comment'),
     path('comment_rating/', views.CommentRatingView.as_view(), name='comment_rating'),
     path('slider/', views.SliderView.as_view(), name='slider'),
+    path('footer_media/', views.FooterMediaView.as_view(), name='footer_media'),
     url(r'^swagger(?P<format>\.json|\.yaml)$',
         schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger',

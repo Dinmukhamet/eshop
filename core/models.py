@@ -388,3 +388,13 @@ class Slider(models.Model):
             return self.product.name
         else:
             return None
+
+class FooterMedia(models.Model):
+    name = models.CharField(max_length=254)
+    media_type = models.CharField(max_length=254)
+
+    class Meta:
+        ordering = ['name']
+    
+    def __str__(self):
+        return self.name
