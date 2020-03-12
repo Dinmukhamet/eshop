@@ -20,7 +20,7 @@ class SubcategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subcategory
-        fields = ['id', 'name', 'category', 'subcategory']
+        fields = ['id', 'name', 'category']
 
 # PurchasedProduct.objects.values('product').annotate(number_of_purchases = Sum('count')).order_by('-number_of_purchases')
 
