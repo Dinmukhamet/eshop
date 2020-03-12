@@ -149,7 +149,7 @@ class SliderAdmin(admin.ModelAdmin):
     list_display = ('id', 'product_name', 'display_product_in_salebundle')    
 
 admin.site.register(Session, SessionAdmin)
-admin.site.register(Slider)
+admin.site.register(Slider, SliderAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Subcategory)
 admin.site.register(Brand)
