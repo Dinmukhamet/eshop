@@ -376,15 +376,15 @@ class Slider(models.Model):
 
     class Meta:
         ordering = ['image']
-
-    def __str__(self):
-        if self.product:
-            product_name = self.product.name
-            return 'Images for product {}'.format(product_name)
-        return 'There is no product. Slider #{}'.format(self.id)
     
     def display_product_in_salebundle(self):
-        return self.salebundle.display_products()
+        if self.salebundle:
+            return self.salebundle.display_products()
+        else:
+            return None
     
     def product_name(self):
-        return self.product.name
+        if self.product:
+            return self.product.name
+        else:
+            return None
