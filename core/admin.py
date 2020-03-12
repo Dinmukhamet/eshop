@@ -145,6 +145,8 @@ class SaleBundleAdmin(nested_admin.NestedModelAdmin):
     list_display = ('id', 'date_from', 'date_to', 'created_at',
                     'display_products', 'total_price', 'new_price')
 
+class SliderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'product_name', 'display_product_in_salebundle')    
 
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Slider)

@@ -382,3 +382,9 @@ class Slider(models.Model):
             product_name = self.product.name
             return 'Images for product {}'.format(product_name)
         return 'There is no product. Slider #{}'.format(self.id)
+    
+    def display_product_in_salebundle(self):
+        return self.salebundle.display_products()
+    
+    def product_name(self):
+        return self.product.name
