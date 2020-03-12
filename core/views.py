@@ -196,6 +196,7 @@ class RecommendedProductView(generics.ListAPIView):
 
 
 class SaleView(generics.ListCreateAPIView):
+    permission_classes = [IsPostOrIsAuthenticated,]
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer
 

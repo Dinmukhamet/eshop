@@ -13,7 +13,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'parent']
+        fields = ['id', 'name']
 
 
 class SubcategorySerializer(serializers.ModelSerializer):
@@ -119,7 +119,7 @@ class RecommendedProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RecommendedProduct
-        fields = ['id', 'date_from', 'date_to', 'category', 'product']
+        fields = ['id', 'date_from', 'date_to', 'subcategory', 'product']
 
     # def create(self, validated_data):
     #     products_data = validated_data.pop('products')
@@ -136,7 +136,7 @@ class ProductToSaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductToSale
-        fields = ['category', 'product', 'old_price', 'new_price']
+        fields = ['subcategory', 'product', 'old_price', 'new_price']
         depth = 1
 
 
@@ -160,7 +160,7 @@ class ProductToSaleBundleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductToSaleBundle
-        fields = ['id', 'category', 'product', 'price']
+        fields = ['id', 'subcategory', 'product', 'price']
 
 
 class SaleBundleSerializer(serializers.ModelSerializer):
