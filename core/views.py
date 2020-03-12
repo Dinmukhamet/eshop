@@ -76,10 +76,10 @@ class CategoryDetailView(APIView):
 class ProductPriceFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
-
+    category = filters.NumberFilter(field_name="subcategory__category")
     class Meta:
         model = Product
-        fields = ['subcategory__category','subcategory', 'brand', 'min_price', 'max_price']
+        fields = ['category','subcategory', 'brand', 'min_price', 'max_price']
 
 
 class ProductView(generics.ListAPIView):
