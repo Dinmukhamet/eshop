@@ -23,14 +23,13 @@ def get_next_in_date_hierarchy(request, date_hierarchy):
 
 class ProductAdmin(admin.ModelAdmin):
     list_filter = (
-        # 'subcategory', 
+        'subcategory',
         'brand',)
     list_display = ('name', 'price', 'brand',
                     'created_at', 'total_purchase')
     fieldsets = [
-        (None, {'fields': ('name', 'price', 
-        # 'subcategory',
-                           'brand', 'total_purchase')})
+        (None, {'fields': ('name', 'description', 'price', 'image',
+                           'subcategory', 'brand', 'created_at', 'total_purchase')})
     ]
 
 
@@ -106,6 +105,7 @@ class SaleAdmin(admin.ModelAdmin):
         (None, {'fields': (('date_to', 'value'))})
     ]
 
+
 class ProductToSaleAdmin(admin.ModelAdmin):
     list_display = ('id', 'sale', 'product', 'old_price', 'new_price')
 
@@ -130,9 +130,9 @@ class PurchaseAdmin(admin.ModelAdmin):
 
 
 class RecommendedProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 
-    # 'subcategory', 
-    'display_recommendedproduct')
+    list_display = ('id',
+                    # 'subcategory',
+                    'display_recommendedproduct')
 
 
 class ProductSectionInline(nested_admin.NestedStackedInline):
@@ -145,8 +145,10 @@ class SaleBundleAdmin(nested_admin.NestedModelAdmin):
     list_display = ('id', 'date_from', 'date_to', 'created_at',
                     'display_products', 'total_price', 'new_price')
 
+
 class SliderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product_name', 'display_product_in_salebundle')    
+    list_display = ('id', 'product_name', 'display_product_in_salebundle')
+
 
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Slider, SliderAdmin)
