@@ -12,8 +12,8 @@ from .permissions import *
 from .models import *
 from .serializers import *
 
-import stripe
-stripe.api_key = ''
+# import stripe
+# stripe.api_key = ''
 
 # Create your views here.
 
