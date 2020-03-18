@@ -391,8 +391,10 @@ class Slider(models.Model):
 
 class FooterMedia(models.Model):
     name = models.CharField(max_length=254)
-    media_type = models.CharField(max_length=254)
-
+    media_type = models.URLField(max_length=254)
+    image = models.URLField(
+        max_length=254, default='https://imgur.com/bY5YJhB')
+    
     class Meta:
         ordering = ['name']
     

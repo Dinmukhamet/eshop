@@ -184,4 +184,4 @@ class FooterMediaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FooterMedia
-        fields = ['id', 'name', 'media_type']
+        fields = ['id', 'name', 'media_type', 'image']
