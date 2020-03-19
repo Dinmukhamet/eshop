@@ -127,6 +127,7 @@ class PurchaseAdmin(admin.ModelAdmin):
     list_display = ('id', 'display_customer_info', 'display_customer_email',
                     'display_customer_phonenumber', 'display_customer_address',
                     'display_purchased_product', 'total_sum')
+    list_filter = ('products',)
 
 
 class RecommendedProductAdmin(admin.ModelAdmin):
