@@ -360,6 +360,7 @@ class SaleBundle(models.Model):
     date_to = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
+    price = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['date_from']
@@ -371,9 +372,12 @@ class SaleBundle(models.Model):
         return sum(product.product.price for product in self.products.all())
 
     def new_price(self):
-        data = [product.product.price for product in self.products.all()]
-        data.remove(min(data))
-        return sum(data)
+        if self.price == 0:
+            data = [product.product.price for product in self.products.all()]
+            data.remove(min(data))
+            return sum(data)
+        else:
+            return self.price
 
     def display_products(self):
         return ', '.join(product.product.name for product in self.products.all())
