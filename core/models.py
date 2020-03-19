@@ -25,6 +25,8 @@ class Brand(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Бренд'
+        verbose_name_plural = 'Бренды'
 
     def __str__(self):
         return self.name
@@ -37,6 +39,8 @@ class Category(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
         return self.name
@@ -49,6 +53,8 @@ class Subcategory(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Подкатегория'
+        verbose_name_plural = 'Подкатегории'
 
     def __str__(self):
         return self.name
@@ -68,6 +74,8 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
 
     def __str__(self):
         return '{}'.format(self.name)
@@ -96,8 +104,9 @@ class Product(models.Model):
 class Purchase(models.Model):
     # date = models.DateTimeField(auto_now_add=True)
 
-    # class Meta:
-    #     ordering = ['date']
+    class Meta:
+        verbose_name = 'Покупка'
+        verbose_name_plural = 'Покупки'
 
     def total_sum(self):
         return sum(item.total() for item in PurchasedProduct.objects.filter(purchase=self.id))
@@ -141,6 +150,8 @@ class PurchasedProduct(models.Model):
 
     class Meta:
         ordering = ['product']
+        verbose_name = 'Купленный товар'
+        verbose_name_plural = 'Купленные товары'
 
     def __str__(self):
         purchase_id = self.id
@@ -183,6 +194,9 @@ class CustomerInfo(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Данные покупателя'
+        verbose_name_plural = 'Данные покупателей'
+
 
     def __str__(self):
         return self.name
@@ -196,6 +210,9 @@ class Rating(models.Model):
 
     class Meta:
         ordering = ['product']
+        verbose_name = 'Рейтинг товара'
+        verbose_name_plural = 'Рейтинг товаров'
+
 
     def __str__(self):
         product_name = self.product.name
@@ -209,6 +226,9 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['product']
+        verbose_name = 'Коммент к товару'
+        verbose_name_plural = 'Коммент к товарам'
+
 
     def __str__(self):
         product_name = self.product.name
@@ -223,6 +243,9 @@ class CommentRating(models.Model):
 
     class Meta:
         ordering = ['comment']
+        verbose_name = 'Рейтинг коммента'
+        verbose_name_plural = 'Рейтинг комментов'
+
 
     def __str__(self):
         product = self.comment.product.name
@@ -242,6 +265,9 @@ class RecommendedProduct(models.Model):
 
     class Meta:
         ordering = ['date_from']
+        verbose_name = 'Рекомендованный товар'
+        verbose_name_plural = 'Рекомендованные товары'
+
 
     def __str__(self):
         return 'Recommended Product object #{}'.format(self.id)
@@ -270,6 +296,9 @@ class Sale(models.Model):
 
     class Meta:
         ordering = ['date_from']
+        verbose_name = 'Скидка'
+        verbose_name_plural = 'Скидки'
+
 
     def __str__(self):
         return str(self.value) + '%'
@@ -296,6 +325,9 @@ class ProductToSale(models.Model):
 
     class Meta:
         ordering = ['product']
+        verbose_name = 'Товар по скидке'
+        verbose_name_plural = 'Товары по скидке'
+
 
     def product_name(self):
         return self.product.name
@@ -331,6 +363,9 @@ class SaleBundle(models.Model):
 
     class Meta:
         ordering = ['date_from']
+        verbose_name = 'Акция'
+        verbose_name_plural = 'Акции'
+
 
     def total_price(self):
         return sum(product.product.price for product in self.products.all())
@@ -361,6 +396,9 @@ class ProductToSaleBundle(models.Model):
 
     class Meta:
         ordering = ['salebundle']
+        verbose_name = 'Товар по акции'
+        verbose_name_plural = 'Товары по акции'
+
 
     def price(self):
         return self.product.price
@@ -376,6 +414,9 @@ class Slider(models.Model):
 
     class Meta:
         ordering = ['image']
+        verbose_name = 'Слайдер'
+        verbose_name_plural = 'Слайдеры'
+
     
     def display_product_in_salebundle(self):
         if self.salebundle:
