@@ -90,8 +90,7 @@ class ProductAdmin(nested_admin.NestedModelAdmin):
     list_display = ('name', 'price', 'brand',
                     'created_at', 'total_purchase')
     fieldsets = [
-        (None, {'fields': ('name', 'description', 'price', 'image',
-                           'subcategory', 'brand')})
+        (None, {'fields': ('name', 'description', 'price', 'image', 'category', 'subcategory', 'brand')})
     ]
 
 
