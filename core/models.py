@@ -278,8 +278,15 @@ class CommentRating(models.Model):
 class RecommendedProduct(models.Model):
     date_from = models.DateTimeField(auto_now_add=True)
     date_to = models.DateTimeField(null=True, blank=True)
-    subcategory = models.ForeignKey(
-        Subcategory, on_delete=models.CASCADE, null=False)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=False)
+    subcategory = ChainedForeignKey(
+        Subcategory,
+        chained_field="category",
+        chained_model_field="category",
+        show_all=False,
+        auto_choose=True,
+        sort=True)
     product = ChainedManyToManyField(
         Product,
         chained_field="subcategory",
@@ -334,8 +341,15 @@ class ProductToSale(models.Model):
     sale = models.ForeignKey(
         Sale, related_name='products', on_delete=models.CASCADE, null=False)
 
-    subcategory = models.ForeignKey(
-        Subcategory, on_delete=models.CASCADE, null=False)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=False)
+    subcategory = ChainedForeignKey(
+        Subcategory,
+        chained_field="category",
+        chained_model_field="category",
+        show_all=False,
+        auto_choose=True,
+        sort=True)
     product = ChainedForeignKey(
         Product,
         chained_field="subcategory",
@@ -407,8 +421,15 @@ class SaleBundle(models.Model):
 class ProductToSaleBundle(models.Model):
     salebundle = models.ForeignKey(
         SaleBundle, related_name='products', on_delete=models.CASCADE, null=False)
-    subcategory = models.ForeignKey(
-        Subcategory, on_delete=models.CASCADE, null=False)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=False)
+    subcategory = ChainedForeignKey(
+        Subcategory,
+        chained_field="category",
+        chained_model_field="category",
+        show_all=False,
+        auto_choose=True,
+        sort=True)
     product = ChainedForeignKey(
         Product,
         chained_field="subcategory",

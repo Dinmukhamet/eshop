@@ -102,7 +102,11 @@ class CustomerInfoAdmin(admin.ModelAdmin):
     ]
 
 
-class SaleAdmin(admin.ModelAdmin):
+class ProductToSaleInline(nested_admin.NestedStackedInline):
+    model = ProductToSale
+
+class SaleAdmin(nested_admin.NestedModelAdmin):
+    inlines = [ProductToSaleInline]
     list_filter = ('date_from', 'date_to')
     list_display = ('date_from', 'date_to', 'value',
                     'display_products_to_sale', )
