@@ -416,8 +416,7 @@ class ProductToSaleBundle(models.Model):
 
 
 class Slider(models.Model):
-    image = models.URLField(
-        max_length=254, default='https://imgur.com/bY5YJhB')
+    image = models.ImageField(upload_to='slider_images')
     product = models.ForeignKey(
         Product, on_delete=models.SET_NULL, null=True, blank=True)
     salebundle = models.ForeignKey(
@@ -444,8 +443,7 @@ class Slider(models.Model):
 class FooterMedia(models.Model):
     name = models.CharField(max_length=254)
     media_type = models.URLField(max_length=254)
-    image = models.URLField(
-        max_length=254, default='https://imgur.com/bY5YJhB')
+    image = models.ImageField(upload_to='footer_images')
     
     class Meta:
         ordering = ['name']
