@@ -79,7 +79,7 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, null=False)
     subcategory = ChainedForeignKey(
-        subcategory,
+        Subcategory,
         chained_field="category",
         chained_model_field="category",
         show_all=False,
