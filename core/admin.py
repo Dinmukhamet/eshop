@@ -141,6 +141,7 @@ class PurchaseAdmin(admin.ModelAdmin):
 
 class RecommendedProductAdmin(admin.ModelAdmin):
     list_display = ('id',
+                    'category',
                     'subcategory',
                     'display_recommendedproduct')
 
