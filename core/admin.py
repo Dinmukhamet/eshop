@@ -107,7 +107,7 @@ class ProductToSaleInline(nested_admin.NestedStackedInline):
 
 class SaleAdmin(nested_admin.NestedModelAdmin):
     inlines = [ProductToSaleInline]
-    list_filter = ('date_from', 'date_to')
+    list_filter = ('date_from', 'date_to', 'products__product')
     list_display = ('date_from', 'date_to', 'value',
                     'display_products_to_sale', )
     fieldsets = [
@@ -136,10 +136,11 @@ class PurchaseAdmin(admin.ModelAdmin):
     list_display = ('id', 'display_customer_info', 'display_customer_email',
                     'display_customer_phonenumber', 'display_customer_address',
                     'display_purchased_product', 'total_sum')
-    list_filter = ('products__product',)
+    list_filter = ('products__product', 'products__category', 'products__subcategory', 'contacts__email')
 
 
 class RecommendedProductAdmin(admin.ModelAdmin):
+    list_filter = ('product', 'category', 'subcategory')
     list_display = ('id',
                     'category',
                     'subcategory',
@@ -152,6 +153,7 @@ class ProductSectionInline(nested_admin.NestedStackedInline):
 
 
 class SaleBundleAdmin(nested_admin.NestedModelAdmin):
+    list_filter = ('products__product', 'products__category', 'products__subcategory', 'contacts__email')
     inlines = [ProductSectionInline]
     list_display = ('id', 'date_from', 'date_to', 'created_at',
                     'display_products', 'total_price', 'new_price')
