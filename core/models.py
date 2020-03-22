@@ -61,12 +61,14 @@ class Subcategory(models.Model):
     def __str__(self):
         return self.name
 
+
 def upload_location(instance, filename):
     filebase, extension = filename.rsplit('.', 1)
     if extension == 'webp':
         raise APIException('Choose another image format')
     else:
         return 'product_images/%032x.%s' % (random.getrandbits(128), extension)
+
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -106,6 +108,17 @@ class Product(models.Model):
 #     def __str__(self):
 #         product_name = self.product.name
 #         return 'Product {}: {}'.format(product_name, self.price)
+
+
+class ProductImages(models.Model):
+    product = models.ForeignKey(
+        Product, related_name='images', on_delete=models.CASCADE, null=False)
+    image = models.ImageField(upload_to=upload_location)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Изображение товара'
+        verbose_name_plural = 'Изображение товаров'
 
 
 class Purchase(models.Model):
@@ -204,7 +217,6 @@ class CustomerInfo(models.Model):
         verbose_name = 'Данные покупателя'
         verbose_name_plural = 'Данные покупателей'
 
-
     def __str__(self):
         return self.name
 
@@ -219,7 +231,6 @@ class Rating(models.Model):
         ordering = ['product']
         verbose_name = 'Рейтинг товара'
         verbose_name_plural = 'Рейтинг товаров'
-
 
     def __str__(self):
         product_name = self.product.name
@@ -236,7 +247,6 @@ class Comment(models.Model):
         verbose_name = 'Коммент к товару'
         verbose_name_plural = 'Коммент к товарам'
 
-
     def __str__(self):
         product_name = self.product.name
         return '{}: {}'.format(product_name, self.comment)
@@ -252,7 +262,6 @@ class CommentRating(models.Model):
         ordering = ['comment']
         verbose_name = 'Рейтинг коммента'
         verbose_name_plural = 'Рейтинг комментов'
-
 
     def __str__(self):
         product = self.comment.product.name
@@ -274,7 +283,6 @@ class RecommendedProduct(models.Model):
         ordering = ['date_from']
         verbose_name = 'Рекомендованный товар'
         verbose_name_plural = 'Рекомендованные товары'
-
 
     def __str__(self):
         return 'Recommended Product object #{}'.format(self.id)
@@ -306,7 +314,6 @@ class Sale(models.Model):
         verbose_name = 'Скидка'
         verbose_name_plural = 'Скидки'
 
-
     def __str__(self):
         return str(self.value) + '%'
 
@@ -334,7 +341,6 @@ class ProductToSale(models.Model):
         ordering = ['product']
         verbose_name = 'Товар по скидке'
         verbose_name_plural = 'Товары по скидке'
-
 
     def product_name(self):
         return self.product.name
@@ -374,7 +380,6 @@ class SaleBundle(models.Model):
         verbose_name = 'Акция'
         verbose_name_plural = 'Акции'
 
-
     def total_price(self):
         return sum(product.product.price for product in self.products.all())
 
@@ -410,7 +415,6 @@ class ProductToSaleBundle(models.Model):
         verbose_name = 'Товар по акции'
         verbose_name_plural = 'Товары по акции'
 
-
     def price(self):
         return self.product.price
 
@@ -427,26 +431,26 @@ class Slider(models.Model):
         verbose_name = 'Слайдер'
         verbose_name_plural = 'Слайдеры'
 
-    
     def display_product_in_salebundle(self):
         if self.salebundle:
             return self.salebundle.display_products()
         else:
             return None
-    
+
     def product_name(self):
         if self.product:
             return self.product.name
         else:
             return None
 
+
 class FooterMedia(models.Model):
     name = models.CharField(max_length=254)
     media_type = models.URLField(max_length=254)
     image = models.ImageField(upload_to='footer_images')
-    
+
     class Meta:
         ordering = ['name']
-    
+
     def __str__(self):
         return self.name

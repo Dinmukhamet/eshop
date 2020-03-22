@@ -21,18 +21,6 @@ def get_next_in_date_hierarchy(request, date_hierarchy):
     return 'month'
 
 
-class ProductAdmin(admin.ModelAdmin):
-    list_filter = (
-        'subcategory',
-        'brand',)
-    list_display = ('name', 'price', 'brand',
-                    'created_at', 'total_purchase')
-    fieldsets = [
-        (None, {'fields': ('name', 'description', 'price', 'image',
-                           'subcategory', 'brand')})
-    ]
-
-
 @admin.register(SaleSummary)
 class SaleSummaryAdmin(admin.ModelAdmin):
     change_list_template = 'admin/sale_summary_change_list.html'
@@ -89,6 +77,23 @@ class SaleSummaryAdmin(admin.ModelAdmin):
         return response
 
 
+class ProductImagesInline(nested_admin.NestedStackedInline):
+    model = ProductImages
+
+
+class ProductAdmin(nested_admin.NestedModelAdmin):
+    inlines = [ProductImagesInline]
+    list_filter = (
+        'subcategory',
+        'brand',)
+    list_display = ('name', 'price', 'brand',
+                    'created_at', 'total_purchase')
+    fieldsets = [
+        (None, {'fields': ('name', 'description', 'price', 'image',
+                           'subcategory', 'brand')})
+    ]
+
+
 class CustomerInfoAdmin(admin.ModelAdmin):
     list_filter = ('purchase',)
     list_display = ('name', 'email', 'phone_number', 'address', 'comment')
@@ -132,7 +137,7 @@ class PurchaseAdmin(admin.ModelAdmin):
 
 class RecommendedProductAdmin(admin.ModelAdmin):
     list_display = ('id',
-                    # 'subcategory',
+                    'subcategory',
                     'display_recommendedproduct')
 
 

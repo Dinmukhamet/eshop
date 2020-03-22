@@ -40,7 +40,15 @@ class PurchasedProductSerializer(serializers.ModelSerializer):
                   'count', 'sale_value', 'total', 'created_at']
 
 
+class ProductImagesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProductImages
+        fields = ['id', 'product', 'image']
+
+
 class ProductSerializer(serializers.ModelSerializer):
+    # images = ProductImagesSerializer(many=True)
 
     class Meta:
         model = Product
@@ -179,6 +187,7 @@ class SaleBundleSerializer(serializers.ModelSerializer):
                 salebundle=salebundle, **products)
         salebundle.save()
         return salebundle
+
 
 class FooterMediaSerializer(serializers.ModelSerializer):
 
