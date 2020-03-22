@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import dj_database_url
-import django_heroku
+# import django_heroku
 from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -28,7 +28,8 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
-                 '127.0.0.1', 'eshop-dimash.herokuapp.com']
+                 '127.0.0.1', 'eshop-dimash.herokuapp.com',
+                 '46.101.192.225']
 
 
 # Application definition
@@ -105,8 +106,8 @@ DATABASES = {
     }
 }
 
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+#db_from_env = dj_database_url.config(conn_max_age=600)
+#DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -140,8 +141,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-JET_PROJECT = 'eshop_dimash'
-JET_TOKEN = '80f42f69-235f-428e-84ee-a622dd241e7b'
+JET_PROJECT = 'eshopbackend'
+JET_TOKEN = 'e8babfae-e04c-44cd-b1b2-aea9fcc92b2f'
 JET_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 
 # Static files (CSS, JavaScript, Images)
@@ -170,5 +171,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-django_heroku.settings(locals())
+#django_heroku.settings(locals())
 

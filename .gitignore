@@ -13,3 +13,5 @@ htmlcov
 ~
 ~.
 staticfiles
+media
+static

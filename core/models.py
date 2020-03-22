@@ -3,9 +3,11 @@ from django.db.models import Sum
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
-
-
+from rest_framework.exceptions import APIException
+import random
+# from .storage import OverwriteStorage
 # from annoying.fields import AutoOneToOneField
+
 # Create your models here.
 
 
@@ -59,13 +61,18 @@ class Subcategory(models.Model):
     def __str__(self):
         return self.name
 
+def upload_location(instance, filename):
+    filebase, extension = filename.rsplit('.', 1)
+    if extension == 'webp':
+        raise APIException('Choose another image format')
+    else:
+        return 'product_images/%032x.%s' % (random.getrandbits(128), extension)
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.URLField(
-        max_length=254, default='https://imgur.com/bY5YJhB')
+    image = models.ImageField(upload_to=upload_location)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
     subcategory = models.ForeignKey(
         Subcategory, on_delete=models.CASCADE, null=False)
