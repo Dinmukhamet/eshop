@@ -84,6 +84,7 @@ class ProductImagesInline(nested_admin.NestedStackedInline):
 class ProductAdmin(nested_admin.NestedModelAdmin):
     inlines = [ProductImagesInline]
     list_filter = (
+        'category',
         'subcategory',
         'brand',)
     list_display = ('name', 'price', 'brand',

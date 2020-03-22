@@ -76,8 +76,15 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to=upload_location)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False)
-    subcategory = models.ForeignKey(
-        Subcategory, on_delete=models.CASCADE, null=False)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=False)
+    subcategory = ChainedForeignKey(
+        subcategory,
+        chained_field="category",
+        chained_model_field="category",
+        show_all=False,
+        auto_choose=True,
+        sort=True)
     created_at = models.DateTimeField(auto_now_add=True)
     total_purchase = models.PositiveIntegerField(default=0)
 
@@ -92,8 +99,8 @@ class Product(models.Model):
     def total_quantity(self):
         return Product.objects.all().count()
 
-    def category(self):
-        return self.subcategory.category.id
+    # def category(self):
+    #     return self.subcategory.category.id
     # @property
     # def current_price(self):
     #     if self.price.all():
