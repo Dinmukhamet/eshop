@@ -102,21 +102,25 @@ class ProductDateView(generics.ListAPIView):
     serializer_class = ProductSerializer
 
 
-class ProductDetailView(APIView):
+# class ProductDetailView(APIView):
 
-    def get_object(self, pk):
-        try:
-            return Product.objects.get(pk=pk)
-        except Product.DoesNotExist:
-            response = {"Error": {"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                  "type": "Internal Server Error",
-                                  "message": 'Product with id {} does not exist'.format(pk)}}
-            raise APIException(response)
+#     def get_object(self, pk):
+#         try:
+#             return Product.objects.get(pk=pk)
+#         except Product.DoesNotExist:
+#             response = {"Error": {"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+#                                   "type": "Internal Server Error",
+#                                   "message": 'Product with id {} does not exist'.format(pk)}}
+#             raise APIException(response)
 
-    def get(self, request, pk, format=None):
-        product = self.get_object(pk)
-        serializer = ProductSerializer(product)
-        return Response(serializer.data)
+#     def get(self, request, pk, format=None):
+#         product = self.get_object(pk)
+#         serializer = ProductSerializer(product)
+#         return Response(serializer.data)
+
+class ProductDetailView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
 
 class CustomerInfoView(generics.ListCreateAPIView):
