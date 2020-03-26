@@ -25,5 +25,6 @@ urlpatterns = [
     path('jet_api/', include('jet_django.urls')),
     path('jet_api/panel/', RedirectView.as_view(url='http://app.jetadmin.io/app/eshop_dimash/'), name='jet-bridge'),
     path('admin/', admin.site.urls),
+    path('api/', include('authentication.urls')),
     path('', include('core.urls'))
 ]
