@@ -30,3 +30,14 @@ class CustomIndexDashboard(Dashboard):
             column=0,
             order=0
         ))
+
+class CoreIndexDashboard(Dashboard):
+    columns = 3
+
+    def init_with_context(self, context):
+        self.children.append(modules.ModelList(
+            _('Models'),
+            exclude=('auth.*',),
+            column=0,
+            order=0
+        ))
