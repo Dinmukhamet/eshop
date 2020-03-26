@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'nested_admin',
     # my app
     'core',
-    'authentication'
+    # 'authentication'
 ]
 
 MIDDLEWARE = [
@@ -108,7 +108,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = "authentication.CustomUser"
+#AUTH_USER_MODEL = "authentication.CustomUser"
 #db_from_env = dj_database_url.config(conn_max_age=600)
 #DATABASES['default'].update(db_from_env)
 
@@ -161,12 +161,12 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 'EXCEPTION_HANDLER': ['eshop.exceptions.custom_exception_handler'],
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    #'DEFAULT_PERMISSION_CLASSES': (
+     #   'rest_framework.permissions.IsAuthenticated',
+    #),
+    #'DEFAULT_AUTHENTICATION_CLASSES': (
+     #   'rest_framework_simplejwt.authentication.JWTAuthentication',
+    #),
 }
 
 SIMPLE_JWT = {
