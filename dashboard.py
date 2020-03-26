@@ -14,3 +14,10 @@ class CustomIndexDashboard(Dashboard):
             column=0,
             order=0
         ))
+
+        self.children.append(modules.RecentActions(
+            _('Recent Actions'),
+            10,
+            column=0,
+            order=0
+        ))
