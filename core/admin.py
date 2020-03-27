@@ -134,8 +134,11 @@ class SessionAdmin(admin.ModelAdmin):
 class PurchasedProductInline(nested_admin.NestedStackedInline):
     model = PurchasedProduct
 
+class CustomerInfoInline(nested_admin.NestedStackedInline):
+    model = CustomerInfo
+
 class PurchaseAdmin(nested_admin.NestedModelAdmin):
-    inlines = [PurchasedProductInline]
+    inlines = [PurchasedProductInline, CustomerInfoInline]
     list_display = ('id', 'display_customer_info', 'display_customer_email',
                     'display_customer_phonenumber', 'display_customer_address',
                     'display_purchased_product', 'total_sum')
@@ -177,6 +180,5 @@ admin.site.register(RecommendedProduct, RecommendedProductAdmin)
 admin.site.register(Sale, SaleAdmin)
 admin.site.register(ProductToSale, ProductToSaleAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(PurchasedProduct)
 admin.site.register(SaleBundle, SaleBundleAdmin)
 admin.site.register(FooterMedia)
