@@ -375,7 +375,7 @@ class ProductToSale(models.Model):
         return price - (price * sale_value / 100)
 
     def save(self, *args, **kwargs):
-        if ProductToSale.objects.filter(product=self.product).count() > 1:
+        if ProductToSale.objects.filter(product=self.product).count() >= 1:
             raise Exception("This product already has a discount")
         else:
             super().save(*args, **kwargs)
