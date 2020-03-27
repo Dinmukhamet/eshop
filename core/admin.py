@@ -131,8 +131,11 @@ class SessionAdmin(admin.ModelAdmin):
         return obj.get_decoded()
     list_display = ['session_key', '_session_data', 'expire_date']
 
+class PurchasedProductInline(nested_admin.NestedStackedInline):
+    model = PurchasedProduct
 
-class PurchaseAdmin(admin.ModelAdmin):
+class PurchaseAdmin(nested_admin.NestedModelAdmin):
+    inlines = [PurchasedProductInline]
     list_display = ('id', 'display_customer_info', 'display_customer_email',
                     'display_customer_phonenumber', 'display_customer_address',
                     'display_purchased_product', 'total_sum')
