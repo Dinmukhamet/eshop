@@ -141,8 +141,8 @@ class PurchaseAdmin(nested_admin.NestedModelAdmin):
     inlines = [PurchasedProductInline, CustomerInfoInline]
     list_display = ('id', 'display_customer_info', 'display_customer_email',
                     'display_customer_phonenumber', 'display_customer_address',
-                    'display_purchased_product', 'total_sum')
-    list_filter = ('products__product', 'products__product__category', 'products__product__subcategory', 'contacts__email')
+                    'display_purchased_product', 'created_at', 'total_sum')
+    list_filter = ('products__product', 'products__product__category', 'products__product__subcategory', 'contacts__email', 'created_at')
 
 
 class RecommendedProductAdmin(admin.ModelAdmin):
