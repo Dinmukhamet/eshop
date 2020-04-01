@@ -4,6 +4,7 @@ from django.db.models.functions import Trunc
 from django.contrib.sessions.models import Session
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
+from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from .models import *
 
 import nested_admin
@@ -90,7 +91,8 @@ class ProductAdmin(nested_admin.NestedModelAdmin):
     list_display = ('name', 'price', 'brand',
                     'created_at', 'total_purchase')
     fieldsets = [
-        (None, {'fields': ('name', 'description', 'price', 'image', 'category', 'subcategory', 'brand')})
+        (None, {'fields': ('name', 'description', 'price',
+                           'image', 'category', 'subcategory', 'brand')})
     ]
 
 
@@ -104,6 +106,7 @@ class CustomerInfoAdmin(admin.ModelAdmin):
 
 class ProductToSaleInline(nested_admin.NestedStackedInline):
     model = ProductToSale
+
 
 class SaleAdmin(nested_admin.NestedModelAdmin):
     inlines = [ProductToSaleInline]
@@ -131,18 +134,23 @@ class SessionAdmin(admin.ModelAdmin):
         return obj.get_decoded()
     list_display = ['session_key', '_session_data', 'expire_date']
 
+
 class PurchasedProductInline(nested_admin.NestedStackedInline):
     model = PurchasedProduct
+
 
 class CustomerInfoInline(nested_admin.NestedStackedInline):
     model = CustomerInfo
 
+
 class PurchaseAdmin(nested_admin.NestedModelAdmin):
+    date_hierarchy = 'created_at'
     inlines = [PurchasedProductInline, CustomerInfoInline]
     list_display = ('id', 'display_customer_info', 'display_customer_email',
                     'display_customer_phonenumber', 'display_customer_address',
                     'display_purchased_product', 'created_at', 'total_sum')
-    list_filter = ('products__product', 'products__product__category', 'products__product__subcategory', 'contacts__email', 'created_at')
+    list_filter = ('products__product', 'products__product__category', 'products__product__subcategory', 'contacts__email',
+                   ('created_at', DateRangeFilter))
 
 
 class RecommendedProductAdmin(admin.ModelAdmin):
@@ -159,7 +167,8 @@ class ProductSectionInline(nested_admin.NestedStackedInline):
 
 
 class SaleBundleAdmin(nested_admin.NestedModelAdmin):
-    list_filter = ('products__product', 'products__category', 'products__subcategory')
+    list_filter = ('products__product', 'products__category',
+                   'products__subcategory')
     inlines = [ProductSectionInline]
     list_display = ('id', 'date_from', 'date_to', 'created_at',
                     'display_products', 'total_price', 'new_price')
