@@ -134,6 +134,8 @@ class Purchase(models.Model):
 
     def total_sum(self):
         return sum(item.total() for item in PurchasedProduct.objects.filter(purchase=self.id))
+    
+    product_name.short_description = 'Итого'
 
     def display_customer_info(self):
         return ', '.join(customer.name for customer in self.contacts.all()[:3])
@@ -184,8 +186,12 @@ class PurchasedProduct(models.Model):
     def name(self):
         return self.product.name
 
+    product_name.short_description = 'Название товара'
+
     def price(self):
         return float(self.product.price)
+
+    price.short_description = 'Цена'
 
     def sale_value(self):
         try:
@@ -195,9 +201,13 @@ class PurchasedProduct(models.Model):
             product = 0
         return product
 
+    sale_value.short_description = 'Скидка'
+
     def total(self):
         sale = self.count * self.price() * (self.sale_value() / 100)
         return (self.count * self.price()) - sale
+    
+    total.short_description = 'Итого'
 
     def save(self, *args, **kwargs):
         product = self.product
@@ -365,13 +375,19 @@ class ProductToSale(models.Model):
     def product_name(self):
         return self.product.name
 
+    product_name.short_description = 'Товар' 
+
     def old_price(self):
         return self.product.price
+    
+    old_price.short_description = 'Старая цена'
 
     def new_price(self):
         price = self.old_price()
         sale_value = self.sale.value
         return price - (price * sale_value / 100)
+
+    new_price.short_description = 'Новая цена'
 
     def save(self, *args, **kwargs):
         if ProductToSale.objects.filter(product=self.product).count() >= 1:
@@ -461,7 +477,7 @@ class Slider(models.Model):
     class Meta:
         ordering = ['image']
         verbose_name = 'Слайдер'
-        verbose_name_plural = 'Слайдеры'
+        verbose_name_plural = 'Слайдер'
 
     def display_product_in_salebundle(self):
         if self.salebundle:
@@ -469,13 +485,15 @@ class Slider(models.Model):
         else:
             return None
 
-    display_product_in_salebundle.short_description = 'Товары'
+    display_product_in_salebundle.short_description = 'Товары по акции'
 
     def product_name(self):
         if self.product:
             return self.product.name
         else:
             return None
+    
+    product_name.short_description = 'Товар'
 
 
 class FooterMedia(models.Model):
