@@ -4,7 +4,7 @@ from django.db.models.functions import Trunc
 from django.contrib.sessions.models import Session
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
-from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
+from jet.filters import DateRangeFilter
 from .models import *
 
 import nested_admin
