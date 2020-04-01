@@ -135,7 +135,7 @@ class Purchase(models.Model):
     def total_sum(self):
         return sum(item.total() for item in PurchasedProduct.objects.filter(purchase=self.id))
     
-    product_name.short_description = 'Итого'
+    total_sum.short_description = 'Итого'
 
     def display_customer_info(self):
         return ', '.join(customer.name for customer in self.contacts.all()[:3])
