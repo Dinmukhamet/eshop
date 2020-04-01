@@ -186,7 +186,7 @@ class PurchasedProduct(models.Model):
     def name(self):
         return self.product.name
 
-    product_name.short_description = 'Название товара'
+    name.short_description = 'Название товара'
 
     def price(self):
         return float(self.product.price)
