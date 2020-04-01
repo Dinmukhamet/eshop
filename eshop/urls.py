@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
+from django.conf.urls.i18n import i18n_patterns
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     path('nested_admin/', include('nested_admin.urls')),
     path('chaining/', include('smart_selects.urls')),
     path('jet/', include('jet.urls', 'jet')),
@@ -27,4 +28,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 #    path('api/', include('authentication.urls')),
     path('', include('core.urls'))
-]
+)

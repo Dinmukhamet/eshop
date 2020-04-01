@@ -15,7 +15,7 @@ import dj_database_url
 # import django_heroku
 from decouple import config
 from datetime import timedelta
-
+from django.utils.translation import gettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SETTINGS_PATH = os.path.realpath(os.path.dirname(__file__))
@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
                  '127.0.0.1', 'eshop-dimash.herokuapp.com',
                  '46.101.192.225']
 
-
+USE_I18N = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -133,6 +134,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('ru', _('Russian')),
+]
 
 LANGUAGE_CODE = 'en-us'
 
