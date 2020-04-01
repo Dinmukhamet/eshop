@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'jet_django',
     'smart_selects',
     'nested_admin',
+    'rangefilter',
     # my app
     'core',
     # 'authentication'
