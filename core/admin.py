@@ -22,7 +22,7 @@ def get_next_in_date_hierarchy(request, date_hierarchy):
     return 'month'
 
 
-# @admin.register(SaleSummary)
+@admin.register(SaleSummary)
 class SaleSummaryAdmin(admin.ModelAdmin):
     change_list_template = 'admin/sale_summary_change_list.html'
     list_filter = (
@@ -42,12 +42,12 @@ class SaleSummaryAdmin(admin.ModelAdmin):
             return response
 
         metrics = {
-            'total': Count('count'),
-            'total_sales': Sum('product__price'),
+            'total': Count('purchase__products__product__total_purchase'),
+            'total_sales': Sum('purchase__products__count'),
         }
 
         response.context_data['summary'] = list(
-            qs.values('product__name').annotate(
+            qs.values('purchase__products__product').annotate(
                 **metrics).order_by('-total_sales')
         )
 
@@ -175,7 +175,7 @@ class SaleBundleAdmin(nested_admin.NestedModelAdmin):
 
 
 class SliderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product_name', 'display_product_in_salebundle')
+    list_display = ('id', 'product_name', 'display_product_in_salebundle', 'description')
 
 
 # admin.site.register(Session, SessionAdmin)

@@ -113,7 +113,7 @@ class SliderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Slider
-        fields = ['id', 'image', 'product', 'salebundle']
+        fields = ['id', 'image', 'product', 'salebundle', 'description']
 
 
 # class ProductToRecommendedProductSerializer(serializers.ModelSerializer):

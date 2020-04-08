@@ -473,6 +473,7 @@ class Slider(models.Model):
         Product, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Товар')
     salebundle = models.ForeignKey(
         SaleBundle, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Акция')
+    description = models.TextField(verbose_name='Описание')
 
     class Meta:
         ordering = ['image']
