@@ -63,5 +63,5 @@ urllib3==1.25.8
 wcwidth==0.1.8
 whitenoise==5.0.1
 wrapt==1.11.2
+django-admin-rangefilter==0.5.4
 git+https://github.com/digi604/django-smart-selects.git@js-unlinting-fixes
-
