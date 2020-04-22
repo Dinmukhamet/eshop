@@ -1,0 +1,189 @@
+{% load i18n %}
+{% load clicky %}
+
+{% block content %}
+{% csrf_token %}
+
+
+{% if module.purchase_stats %}
+    <ul>
+        {% for stat in module.purchase_stats %}
+            <li>
+                {{ stat.name }}
+                <span class="float-right"> {{ stat.value }} </span>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div id="container" style="width: 75%; margin: 0 auto; position: relative; left:0px;">
+      <div class="brands" style="margin: 10px auto; padding: 10px 0; font-size: 18px;" >
+        <canvas height="180px" id="pie-chart"></canvas>
+      </div>
+      <div height="300px" style="margin: 50px 0;"  >
+        <canvas id="bar-chart"></canvas>
+      </div>
+      <div height="300px" style="margin: 50px 0;">
+        <canvas id="unpopular-chart"></canvas>
+      </div>
+      <div height="300px" style="margin: 50px 0;">
+        <canvas id="revenue-chart"></canvas>
+      </div>
+    </div>
+
+{% else %}
+    <ul>
+        <li>
+            {% trans "Nothing to show" %}
+        </li>
+    </ul>
+{% endif %}
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+
+  // let dataArray = {{data}} ;
+  // let labelsArray = labels ;
+  var config = {
+    type: 'pie',
+    data: {
+      datasets: [{
+        data: {{ module.brand_stats.data|safe }},
+        backgroundColor: [
+          '#f8b595',
+          '#f67280',
+          '#c06c84',
+          '#6c5b7c',
+          '#f9ed69',
+          '#f08a5d',
+          '#b83b5e',
+          '#6a2c70'
+        ],
+        label: {{ module.brand_stats.labels|safe }}
+      }],
+  labels: {{ module.brand_stats.labels|safe }}
+    },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+      text: 'Топ 5 продаваемых брендов'
+    }
+  }
+  };
+
+  var configBar = {
+    type: 'bar',
+    data: {
+      datasets: [{
+        data: {{ module.top_products_stats.data|safe }},
+    backgroundColor: [
+          '#f4eeff',
+          '#dcd6f7',
+          '#a6b1e1',
+          '#424874',
+          '#f9f7f7',
+          '#dbe2ef',
+          '#3f72af',
+          '#112d4e'
+    ],
+    borderColor: [
+          '#f4eeff',
+          '#dcd6f7',
+          '#a6b1e1',
+          '#424874',
+          '#f9f7f7',
+          '#dbe2ef',
+          '#3f72af',
+          '#112d4e'
+    ],
+    borderWidth: 1,
+    label: 'Bar'
+      }],
+  labels: {{ module.top_products_stats.labels|safe }}
+    },
+  options: {
+    responsive: true,
+      backgroundColor: '#f9ed69',
+        scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        },
+        gridLines: {
+          color: "#f9f7f7",
+        }
+
+      }],
+        xAxes: [{
+          gridLines: {
+            color: "#f9f7f7",
+          }
+        }],
+    },
+    title: {
+      display: true,
+      text: 'Количество проданных товаров по дням'
+    }
+  }
+  };
+
+  var configUnpopular = {
+    type: 'radar',
+    data: {
+      datasets: [{
+        data: {{ module.products_stats.data|safe }},
+    backgroundColor: [
+      'rgba(255,99,132,0.2)',
+    ],
+    label: 'Товары'
+      }],
+  labels: {{ module.products_stats.short_name|safe }}
+    },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+      text: 'Популярность проданных товаров'
+    }
+  }
+  };
+
+  var revenue_config = {
+    type: 'line',
+    data: {
+      datasets: [{
+        data: {{ module.revenue_stats.data|safe }},
+    label: 'Line',
+    borderColor: '#8e5ea2',
+    fill: false,
+      }],
+  labels: {{ module.revenue_stats.labels|safe }}
+    },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+      text: 'Общая прибыль по месяцам'
+    }
+  }
+  };
+
+
+  window.onload = function () {
+    var ctx = document.getElementById('pie-chart').getContext('2d');
+    window.myPie = new Chart(ctx, config);
+    var ctxBar = document.getElementById('bar-chart').getContext('2d');
+    window.myPie = new Chart(ctxBar, configBar);
+    var ctxUnpopular = document.getElementById('unpopular-chart').getContext('2d');
+    window.myPie = new Chart(ctxUnpopular, configUnpopular);
+    var ctxRevenue = document.getElementById('revenue-chart').getContext('2d');
+    window.myPie = new Chart(ctxRevenue, revenue_config);
+  };
+
+</script>
+{% endblock %}

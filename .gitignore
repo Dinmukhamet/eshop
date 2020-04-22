@@ -18,3 +18,5 @@ static
 authentication
 migrations
 locale
+Procfile
+eshop/client_secrets.json
