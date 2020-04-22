@@ -1,3 +1,7 @@
+import logging
+import os
+
+
 from django.shortcuts import render
 from rest_framework import viewsets, generics, status, permissions
 from rest_framework.views import APIView, Response
@@ -7,6 +11,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Max
 from django.http import JsonResponse
 from .permissions import *
+from django.views.generic import View
+from django.conf import settings
+from django.http import HttpResponse
+
+
 # from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
@@ -79,10 +88,12 @@ class CategoryDetailView(APIView):
 class ProductPriceFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
-    category = filters.ModelChoiceFilter(field_name='subcategory__category', queryset=Category.objects.all())
+    category = filters.ModelChoiceFilter(
+        field_name='subcategory__category', queryset=Category.objects.all())
+
     class Meta:
         model = Product
-        fields = ['category','subcategory', 'brand', 'min_price', 'max_price']
+        fields = ['category', 'subcategory', 'brand', 'min_price', 'max_price']
 
 
 class ProductView(generics.ListAPIView):
@@ -203,7 +214,7 @@ class RecommendedProductView(generics.ListAPIView):
 
 
 class SaleView(generics.ListCreateAPIView):
-    permission_classes = [IsPostOrIsAuthenticated,]
+    permission_classes = [IsPostOrIsAuthenticated, ]
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer
 
@@ -258,6 +269,29 @@ class SaleBundleView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 class FooterMediaView(generics.ListAPIView):
     queryset = FooterMedia.objects.all()
     serializer_class = FooterMediaSerializer
+
+
+class FrontendAppView(View):
+    """
+    Serves the compiled frontend entry point (only works if you have run `yarn
+    run build`).
+    """
+
+    def get(self, request):
+        try:
+            with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html')) as f:
+                return HttpResponse(f.read())
+        except FileNotFoundError:
+            logging.exception('Production build of app not found')
+            return HttpResponse(
+                """
+                This URL is only used when you have built the production
+                version of the app. Visit http://localhost:3000/ instead, or
+                run `yarn run build` to test the production version.
+                """,
+                status=501,
+            )

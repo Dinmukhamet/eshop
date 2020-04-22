@@ -5,6 +5,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 from rest_framework.exceptions import APIException
 import random
+from django.utils.translation import ugettext_lazy as _
+
 # from .storage import OverwriteStorage
 # from annoying.fields import AutoOneToOneField
 
@@ -23,40 +25,40 @@ import random
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название')
+    name = models.CharField(max_length=255, verbose_name=_('Name'))
 
     class Meta:
         ordering = ['name']
-        verbose_name = 'Бренд'
-        verbose_name_plural = 'Бренды'
+        verbose_name = _('Brand')
+        verbose_name_plural = _('Brands')
 
     def __str__(self):
         return self.name
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название')
+    name = models.CharField(max_length=255, verbose_name=_('Name'))
     # parent = models.ForeignKey(
     # 'self', on_delete=models.SET_NULL, blank=True, null=True)
 
     class Meta:
         ordering = ['name']
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
     def __str__(self):
         return self.name
 
 
 class Subcategory(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название')
+    name = models.CharField(max_length=255, verbose_name=_('Name'))
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, null=False, verbose_name='Категория')
+        Category, on_delete=models.CASCADE, null=False, verbose_name=_('Category'))
 
     class Meta:
         ordering = ['name']
-        verbose_name = 'Подкатегория'
-        verbose_name_plural = 'Подкатегории'
+        verbose_name = _('Subcategory')
+        verbose_name_plural = _('Subcategories')
 
     def __str__(self):
         return self.name
@@ -71,13 +73,16 @@ def upload_location(instance, filename):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название')
+    name = models.CharField(max_length=255, verbose_name=_('Name'))
     description = models.TextField(verbose_name='Описание')
-    price = models.DecimalField(max_digits=10, decimal_places=2,verbose_name='Цена')
-    image = models.ImageField(upload_to=upload_location, verbose_name='Изображение')
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=False, verbose_name='Бренд')
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, verbose_name=_('Price'))
+    image = models.ImageField(
+        upload_to=upload_location, verbose_name=_('Image'))
+    brand = models.ForeignKey(
+        Brand, on_delete=models.CASCADE, null=False, verbose_name=_('Brand'))
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, null=False, verbose_name='Категория')
+        Category, on_delete=models.CASCADE, null=False, verbose_name=_('Category'))
     subcategory = ChainedForeignKey(
         Subcategory,
         chained_field="category",
@@ -85,18 +90,19 @@ class Product(models.Model):
         show_all=False,
         auto_choose=True,
         sort=True,
-        verbose_name='Подкатегория')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
-    total_purchase = models.PositiveIntegerField(default=0, verbose_name='Количество продаж')
+        verbose_name=_('Subcategory'))
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('Date'))
+    total_purchase = models.PositiveIntegerField(
+        default=0, verbose_name=_('Total Purchase'))
 
     class Meta:
         ordering = ['name']
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
+        verbose_name = _('Product')
+        verbose_name_plural = _('Products')
 
     def __str__(self):
         return '{}'.format(self.name)
-
 
     # @property
     # def current_price(self):
@@ -116,45 +122,48 @@ class Product(models.Model):
 
 class ProductImages(models.Model):
     product = models.ForeignKey(
-        Product, related_name='images', on_delete=models.CASCADE, null=False, verbose_name='Товар')
-    image = models.ImageField(upload_to=upload_location, verbose_name='Изображение')
+        Product, related_name='images', on_delete=models.CASCADE, null=False, verbose_name=_('Product'))
+    image = models.ImageField(
+        upload_to=upload_location, verbose_name=_('Image'))
 
     class Meta:
         ordering = ['id']
-        verbose_name = 'Изображение товара'
-        verbose_name_plural = 'Изображение товаров'
+        verbose_name = _('Product image')
+        verbose_name_plural = _('Product images')
 
 
 class Purchase(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('Date created'))
 
     class Meta:
-        verbose_name = 'Покупка'
-        verbose_name_plural = 'Покупки'
+        verbose_name = _('Purchase')
+        verbose_name_plural = _('Purchases')
 
     def total_sum(self):
         return sum(item.total() for item in PurchasedProduct.objects.filter(purchase=self.id))
-    
-    total_sum.short_description = 'Итого'
+
+    total_sum.short_description = _('Total')
 
     def display_customer_info(self):
         return ', '.join(customer.name for customer in self.contacts.all()[:3])
 
-    display_customer_info.short_description = 'Покупатель'
+    display_customer_info.short_description = _('Customer')
 
     def display_customer_email(self):
         return ', '.join(customer.email for customer in self.contacts.all()[:3])
 
-    display_customer_email.short_description = 'Email'
+    display_customer_email.short_description = _('Email')
 
     def display_customer_phonenumber(self):
         return ', '.join(customer.phone_number for customer in self.contacts.all()[:3])
 
-    display_customer_phonenumber.short_description = 'Номер телефона'
+    display_customer_phonenumber.short_description = _('Phone number')
+
     def display_customer_address(self):
         return ', '.join(customer.address for customer in self.contacts.all()[:3])
 
-    display_customer_address.short_description = 'Адрес'
+    display_customer_address.short_description = _('Address')
 
     def display_purchased_product(self):
         product_data = [
@@ -163,20 +172,22 @@ class Purchase(models.Model):
         mydict = dict(zip(product_data, product_count))
         return ', '.join(['%s: %s' % (key, value) for (key, value) in mydict.items()])
 
-    display_purchased_product.short_description = 'Купленные Товары'
+    display_purchased_product.short_description = _('Purchased products')
 
 
 class PurchasedProduct(models.Model):
     purchase = models.ForeignKey(
-        Purchase, related_name='products', on_delete=models.CASCADE, null=False, verbose_name='Покупка')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, verbose_name='Товар')
-    count = models.IntegerField(verbose_name='Количество')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+        Purchase, related_name='products', on_delete=models.CASCADE, null=False, verbose_name=_('Purchase'))
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, null=False, verbose_name=_('Product'))
+    count = models.IntegerField(verbose_name=_('Quantity'))
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('Date created'))
 
     class Meta:
         ordering = ['product']
-        verbose_name = 'Купленный товар'
-        verbose_name_plural = 'Купленные товары'
+        verbose_name = _('Purchased product')
+        verbose_name_plural = _('Purchased products')
 
     def __str__(self):
         purchase_id = self.id
@@ -186,12 +197,12 @@ class PurchasedProduct(models.Model):
     def name(self):
         return self.product.name
 
-    name.short_description = 'Название товара'
+    name.short_description = _('Name of the product')
 
     def price(self):
         return float(self.product.price)
 
-    price.short_description = 'Цена'
+    price.short_description = _('Price')
 
     def sale_value(self):
         try:
@@ -201,13 +212,13 @@ class PurchasedProduct(models.Model):
             product = 0
         return product
 
-    sale_value.short_description = 'Скидка'
+    sale_value.short_description = _('Discount')
 
     def total(self):
         sale = self.count * self.price() * (self.sale_value() / 100)
         return (self.count * self.price()) - sale
-    
-    total.short_description = 'Итого'
+
+    total.short_description = _('Total')
 
     def save(self, *args, **kwargs):
         product = self.product
@@ -218,32 +229,35 @@ class PurchasedProduct(models.Model):
 
 class CustomerInfo(models.Model):
     purchase = models.ForeignKey(
-        Purchase, related_name='contacts', on_delete=models.CASCADE, null=True, verbose_name='Покупка') 
-    name = models.CharField(max_length=255, verbose_name='Имя')
-    email = models.EmailField(max_length=255, verbose_name='Email')
-    phone_number = models.CharField(max_length=255, verbose_name='Номер телефона')
-    address = models.CharField(max_length=255, verbose_name='Адрес')
-    comment = models.TextField(blank=True, verbose_name='Комментарий')
+        Purchase, related_name='contacts', on_delete=models.CASCADE, null=True, verbose_name=_('Purchase'))
+    name = models.CharField(max_length=255, verbose_name=_('Name'))
+    email = models.EmailField(max_length=255, verbose_name=_('Email'))
+    phone_number = models.CharField(
+        max_length=255, verbose_name=_('Phone number'))
+    address = models.CharField(max_length=255, verbose_name=_('Address'))
+    comment = models.TextField(blank=True, verbose_name=_('Comment'))
 
     class Meta:
         ordering = ['name']
-        verbose_name = 'Данные покупателя'
-        verbose_name_plural = 'Данные покупателей'
+        verbose_name = _('Customer info')
+        verbose_name_plural = _('Customers info')
 
     def __str__(self):
         return self.name
 
 
 class Rating(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, verbose_name='Товар')
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, null=False, verbose_name=_('Product'))
     rate = models.PositiveIntegerField(
-        default=0, validators=[MinValueValidator(1), MaxValueValidator(5)], verbose_name='Рейтинг')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+        default=0, validators=[MinValueValidator(1), MaxValueValidator(5)], verbose_name=_('Rate'))
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('Date created'))
 
     class Meta:
         ordering = ['product']
-        verbose_name = 'Рейтинг товара'
-        verbose_name_plural = 'Рейтинг товаров'
+        verbose_name = _('Product rate')
+        verbose_name_plural = _('Rates of products')
 
     def __str__(self):
         product_name = self.product.name
@@ -251,14 +265,16 @@ class Rating(models.Model):
 
 
 class Comment(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, verbose_name='Товар')
-    comment = models.TextField(blank=False, verbose_name='Комментарий')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, null=False, verbose_name=_('Product'))
+    comment = models.TextField(blank=False, verbose_name=_('Comment'))
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('Date created'))
 
     class Meta:
         ordering = ['product']
-        verbose_name = 'Коммент к товару'
-        verbose_name_plural = 'Коммент к товарам'
+        verbose_name = _('Comment to product')
+        verbose_name_plural = _('Comment to products')
 
     def __str__(self):
         product_name = self.product.name
@@ -266,15 +282,17 @@ class Comment(models.Model):
 
 
 class CommentRating(models.Model):
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=False, verbose_name='Комментарий')
+    comment = models.ForeignKey(
+        Comment, on_delete=models.CASCADE, null=False, verbose_name=_('Comment'))
     rate = models.PositiveIntegerField(
-        default=0, validators=[MinValueValidator(1), MaxValueValidator(5)], verbose_name='Рейтинг')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+        default=0, validators=[MinValueValidator(1), MaxValueValidator(5)], verbose_name=_('Rate'))
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('Date created'))
 
     class Meta:
         ordering = ['comment']
-        verbose_name = 'Рейтинг коммента'
-        verbose_name_plural = 'Рейтинг комментов'
+        verbose_name = _('Rating for comment')
+        verbose_name_plural = _('Ratings for comments')
 
     def __str__(self):
         product = self.comment.product.name
@@ -282,10 +300,12 @@ class CommentRating(models.Model):
 
 
 class RecommendedProduct(models.Model):
-    date_from = models.DateTimeField(auto_now_add=True, verbose_name='Начало')
-    date_to = models.DateTimeField(null=True, blank=True, verbose_name='Конец')
+    date_from = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('Date from'))
+    date_to = models.DateTimeField(
+        null=True, blank=True, verbose_name=_('Date to'))
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, null=False, verbose_name='Категория')
+        Category, on_delete=models.CASCADE, null=False, verbose_name=_('Category'))
     subcategory = ChainedForeignKey(
         Subcategory,
         chained_field="category",
@@ -293,7 +313,7 @@ class RecommendedProduct(models.Model):
         show_all=False,
         auto_choose=True,
         sort=True,
-        verbose_name='Подкатегория')
+        verbose_name=_('Subcategory'))
     product = ChainedManyToManyField(
         Product,
         chained_field="subcategory",
@@ -302,8 +322,8 @@ class RecommendedProduct(models.Model):
 
     class Meta:
         ordering = ['date_from']
-        verbose_name = 'Рекомендованный товар'
-        verbose_name_plural = 'Рекомендованные товары'
+        verbose_name = _('Recommended product')
+        verbose_name_plural = _('Recommended products')
 
     def __str__(self):
         return 'Recommended Product object #{}'.format(self.id)
@@ -311,7 +331,7 @@ class RecommendedProduct(models.Model):
     def display_recommendedproduct(self):
         return ', '.join(product.name for product in self.product.all()[:3])
 
-    display_recommendedproduct.short_description = 'Товары'
+    display_recommendedproduct.short_description = _('Products')
 
 
 # class ProductToRecommendedProduct(models.Model):
@@ -324,16 +344,19 @@ class RecommendedProduct(models.Model):
 
 
 class Sale(models.Model):
-    date_from = models.DateTimeField(null=True, blank=True, verbose_name='Начало')
-    date_to = models.DateTimeField(null=True, blank=True, verbose_name='Конец')
+    date_from = models.DateTimeField(
+        null=True, blank=True, verbose_name=_('Date from'))
+    date_to = models.DateTimeField(
+        null=True, blank=True, verbose_name=_('Date to'))
     value = models.PositiveIntegerField(
-        default=0, validators=[MinValueValidator(1), MaxValueValidator(100)], verbose_name='Скидка')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+        default=0, validators=[MinValueValidator(1), MaxValueValidator(100)], verbose_name=_('Value'))
+    created = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('Date created'))
 
     class Meta:
         ordering = ['date_from']
-        verbose_name = 'Скидка'
-        verbose_name_plural = 'Скидки'
+        verbose_name = _('Discount')
+        verbose_name_plural = _('Discounts')
 
     def __str__(self):
         return str(self.value) + '%'
@@ -341,15 +364,15 @@ class Sale(models.Model):
     def display_products_to_sale(self):
         return ', '.join(product.product_name() for product in self.products.all()[:3])
 
-    display_products_to_sale.short_description = 'Товары'
+    display_products_to_sale.short_description = _('Products')
 
 
 class ProductToSale(models.Model):
     sale = models.ForeignKey(
-        Sale, related_name='products', on_delete=models.CASCADE, null=False, verbose_name='Скидка')
+        Sale, related_name='products', on_delete=models.CASCADE, null=False, verbose_name=_('Discount'))
 
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, null=False, verbose_name='Категория')
+        Category, on_delete=models.CASCADE, null=False, verbose_name=_('Category'))
     subcategory = ChainedForeignKey(
         Subcategory,
         chained_field="category",
@@ -357,7 +380,7 @@ class ProductToSale(models.Model):
         show_all=False,
         auto_choose=True,
         sort=True,
-        verbose_name='Подкатегория')
+        verbose_name=_('Subcategory'))
     product = ChainedForeignKey(
         Product,
         chained_field="subcategory",
@@ -365,29 +388,29 @@ class ProductToSale(models.Model):
         show_all=False,
         auto_choose=True,
         sort=True,
-        verbose_name='Товар')
+        verbose_name=_('Product'))
 
     class Meta:
         ordering = ['product']
-        verbose_name = 'Товар по скидке'
-        verbose_name_plural = 'Товары по скидке'
+        verbose_name = _('Product with discount')
+        verbose_name_plural = _('Products with discounts')
 
     def product_name(self):
         return self.product.name
 
-    product_name.short_description = 'Товар' 
+    product_name.short_description = _('Product')
 
     def old_price(self):
         return self.product.price
-    
-    old_price.short_description = 'Старая цена'
+
+    old_price.short_description = _('Old price')
 
     def new_price(self):
         price = self.old_price()
         sale_value = self.sale.value
         return price - (price * sale_value / 100)
 
-    new_price.short_description = 'Новая цена'
+    new_price.short_description = _('New price')
 
     def save(self, *args, **kwargs):
         if ProductToSale.objects.filter(product=self.product).count() >= 1:
@@ -400,26 +423,29 @@ class SaleSummary(PurchasedProduct):
 
     class Meta:
         proxy = True
-        verbose_name = 'Sale Summary'
-        verbose_name_plural = 'Sales Summary'
+        verbose_name = _('Sale Summary')
+        verbose_name_plural = _('Sales Summary')
 
 
 class SaleBundle(models.Model):
-    date_from = models.DateTimeField(null=True, blank=True, verbose_name='Начало')
-    date_to = models.DateTimeField(null=True, blank=True, verbose_name='Конец')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
-    description = models.TextField(verbose_name='Описание')
-    price = models.IntegerField(default=0, verbose_name='Новая цена')
+    date_from = models.DateTimeField(
+        null=True, blank=True, verbose_name=_('Date from'))
+    date_to = models.DateTimeField(
+        null=True, blank=True, verbose_name=_('Date to'))
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('Date created'))
+    description = models.TextField(verbose_name=_('Description'))
+    price = models.IntegerField(default=0, verbose_name=_('Price'))
 
     class Meta:
         ordering = ['date_from']
-        verbose_name = 'Акция'
-        verbose_name_plural = 'Акции'
+        verbose_name = _('Sale')
+        verbose_name_plural = _('Sales')
 
     def total_price(self):
         return sum(product.product.price for product in self.products.all())
 
-    total_price.short_description = 'Старая цена'
+    total_price.short_description = _('Old price')
 
     def new_price(self):
         if self.price == 0:
@@ -429,18 +455,19 @@ class SaleBundle(models.Model):
         else:
             return self.price
 
-    new_price.short_description = 'Новая цена'
+    new_price.short_description = _('New price')
 
     def display_products(self):
         return ', '.join(product.product.name for product in self.products.all())
 
-    display_products.short_description = 'Товары'
+    display_products.short_description = _('Products')
+
 
 class ProductToSaleBundle(models.Model):
     salebundle = models.ForeignKey(
-        SaleBundle, related_name='products', on_delete=models.CASCADE, null=False, verbose_name='Акция')
+        SaleBundle, related_name='products', on_delete=models.CASCADE, null=False, verbose_name=_('Sale'))
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, null=False, verbose_name='Категория')
+        Category, on_delete=models.CASCADE, null=False, verbose_name=_('Category'))
     subcategory = ChainedForeignKey(
         Subcategory,
         chained_field="category",
@@ -448,7 +475,7 @@ class ProductToSaleBundle(models.Model):
         show_all=False,
         auto_choose=True,
         sort=True,
-        verbose_name='Подкатегория')
+        verbose_name=_('Subcategory'))
     product = ChainedForeignKey(
         Product,
         chained_field="subcategory",
@@ -456,29 +483,32 @@ class ProductToSaleBundle(models.Model):
         show_all=False,
         auto_choose=True,
         sort=True,
-        verbose_name='Товар')
+        verbose_name=_('Product'))
 
     class Meta:
         ordering = ['salebundle']
-        verbose_name = 'Товар по акции'
-        verbose_name_plural = 'Товары по акции'
+        verbose_name = _('Product on sale')
+        verbose_name_plural = _('Products on sale')
 
     def price(self):
         return self.product.price
 
+    price.short_description = _('Price')
+
 
 class Slider(models.Model):
-    image = models.ImageField(upload_to='slider_images', verbose_name='Изображение')
+    image = models.ImageField(
+        upload_to='slider_images', verbose_name=_('Image'))
     product = models.ForeignKey(
-        Product, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Товар')
+        Product, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Product'))
     salebundle = models.ForeignKey(
-        SaleBundle, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Акция')
-    description = models.TextField(verbose_name='Описание')
+        SaleBundle, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Sale'))
+    description = models.TextField(verbose_name=_('Description'))
 
     class Meta:
         ordering = ['image']
-        verbose_name = 'Слайдер'
-        verbose_name_plural = 'Слайдер'
+        verbose_name = _('Slider')
+        verbose_name_plural = _('Slider')
 
     def display_product_in_salebundle(self):
         if self.salebundle:
@@ -486,15 +516,15 @@ class Slider(models.Model):
         else:
             return None
 
-    display_product_in_salebundle.short_description = 'Товары по акции'
+    display_product_in_salebundle.short_description = _('Products on sale')
 
     def product_name(self):
         if self.product:
             return self.product.name
         else:
             return None
-    
-    product_name.short_description = 'Товар'
+
+    product_name.short_description = _('Product name')
 
 
 class FooterMedia(models.Model):
@@ -504,8 +534,8 @@ class FooterMedia(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name = 'Ссылка для footer\'а'
-        verbose_name_plural = 'Ссылки для footer\'а'
+        verbose_name = _('Footer link')
+        verbose_name_plural = _('Footer links')
 
     def __str__(self):
         return self.name

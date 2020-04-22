@@ -1,11 +1,11 @@
 from django.utils.translation import ugettext_lazy as _
 from jet.dashboard import modules
 from jet.dashboard.dashboard import Dashboard, AppIndexDashboard
-#from jet.dashboard.dashboard_modules import google_analytics
+from jet.dashboard.dashboard_modules import google_analytics
 
+from stats.module import StatsModule
 
 class CustomIndexDashboard(Dashboard):
-    columns = 3
 
     def init_with_context(self, context):
         self.available_children.append(modules.LinkList)
@@ -22,7 +22,11 @@ class CustomIndexDashboard(Dashboard):
             column=0,
             order=0
         ))
-
- #       self.available_children.append(google_analytics.GoogleAnalyticsVisitorsTotals)
- #       self.available_children.append(google_analytics.GoogleAnalyticsVisitorsChart)
- #       self.available_children.append(google_analytics.GoogleAnalyticsPeriodVisitors)
+        self.children.append(StatsModule(
+            _('Statistics'),
+            column=2,
+            order=2
+        ))
+        self.available_children.append(google_analytics.GoogleAnalyticsVisitorsTotals)
+        self.available_children.append(google_analytics.GoogleAnalyticsVisitorsChart)
+        self.available_children.append(google_analytics.GoogleAnalyticsPeriodVisitors)

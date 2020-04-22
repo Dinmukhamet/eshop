@@ -18,10 +18,12 @@ from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
 SETTINGS_PATH = os.path.realpath(os.path.dirname(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
@@ -56,8 +58,10 @@ INSTALLED_APPS = [
     'jet_django',
     'smart_selects',
     'nested_admin',
-    #'rangefilter',
+    'analytical',
+    # 'rangefilter',
     # my app
+    'stats',
     'core',
     # 'authentication'
 ]
@@ -75,12 +79,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# CLICKY_SITE_ID = '101248199'
+# CRAZY_EGG_ACCOUNT_NUMBER = '12345678'
+
 ROOT_URLCONF = 'eshop.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['core/templates'],
+        'DIRS': ['core/templates', 'stats/templates', 'frontend/build'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,7 +119,7 @@ DATABASES = {
 
 #AUTH_USER_MODEL = "authentication.CustomUser"
 #db_from_env = dj_database_url.config(conn_max_age=600)
-#DATABASES['default'].update(db_from_env)
+# DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -141,7 +148,7 @@ LANGUAGES = [
     ('ru', _('Russian')),
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-us' 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -159,8 +166,11 @@ JET_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATIC_ROOT = os.path.join(BASE_DIR, 'frontend/build', 'static')
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/build/','static'),]
+# STATICFILES_DIRS = [
+#     os.path.join(REACT_APP_DIR, 'build', 'static'),
+# ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -168,12 +178,12 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 'EXCEPTION_HANDLER': ['eshop.exceptions.custom_exception_handler'],
-    #'DEFAULT_PERMISSION_CLASSES': (
-     #   'rest_framework.permissions.IsAuthenticated',
-    #),
-    #'DEFAULT_AUTHENTICATION_CLASSES': (
-     #   'rest_framework_simplejwt.authentication.JWTAuthentication',
-    #),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #   'rest_framework.permissions.IsAuthenticated',
+    # ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #   'rest_framework_simplejwt.authentication.JWTAuthentication',
+    # ),
 }
 
 SIMPLE_JWT = {
@@ -193,9 +203,9 @@ SIMPLE_JWT = {
 
 JET_THEMES = [
     {
-        'theme': 'default', # theme folder name
-        'color': '#47bac1', # color of the theme's button in user menu
-        'title': 'Default' # theme title
+        'theme': 'default',  # theme folder name
+        'color': '#47bac1',  # color of the theme's button in user menu
+        'title': 'Default'  # theme title
     },
     {
         'theme': 'green',
@@ -223,14 +233,20 @@ JET_THEMES = [
         'title': 'Light Gray'
     }
 ]
+# GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-164000991-1'
 
+JET_MODULE_GOOGLE_ANALYTICS_CLIENT_SECRETS_FILE = os.path.join(
+    BASE_DIR, 'client_secrets.json')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)
+
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-#django_heroku.settings(locals())
-
+# django_heroku.settings(locals())

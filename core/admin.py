@@ -22,7 +22,7 @@ def get_next_in_date_hierarchy(request, date_hierarchy):
     return 'month'
 
 
-@admin.register(SaleSummary)
+# @admin.register(SaleSummary)
 class SaleSummaryAdmin(admin.ModelAdmin):
     change_list_template = 'admin/sale_summary_change_list.html'
     list_filter = (
@@ -184,6 +184,7 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Subcategory)
 admin.site.register(Brand)
 admin.site.register(Purchase, PurchaseAdmin)
+# admin.site.register(PurchasedProduct)
 admin.site.register(CustomerInfo, CustomerInfoAdmin)
 admin.site.register(RecommendedProduct, RecommendedProductAdmin)
 admin.site.register(Sale, SaleAdmin)
